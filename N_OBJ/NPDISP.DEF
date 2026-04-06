@@ -1,0 +1,59 @@
+LIBRARY DISPLAY
+
+DESCRIPTION 'DISPLAY : 100,  96,  96 : Neko Project II Display Driver.                                      '
+EXETYPE     WINDOWS 3.00
+
+CODE        PRELOAD FIXED
+DATA        PRELOAD FIXED SHARED
+
+EXPORTS
+	BitBlt				@1
+	ColorInfo			@2
+	Control				@3
+	Disable				@4
+	Enable				@5
+	EnumDFonts			@6
+	EnumObj				@7
+	Output				@8
+	Pixel				@9
+	RealizeObject		@10
+	StrBlt				@11
+	ScanLR				@12
+	DeviceMode			@13
+
+	ExtTextOut			@14
+	GetCharWidth		@15	
+	DeviceBitmap		@16
+	FastBorder			@17
+	SetAttribute		@18
+
+	DeviceBitmapBits	@19
+	CreateBitmap		@20
+	DIBScreenBlt		@21
+
+	SetPalette			@22
+	GetPalette			@23
+
+	SetPalTrans			@24
+	GetPalTrans			@25
+	UpdateColors		@26
+
+	StretchBlt			@27
+
+	SaveScreenBitmap	@92
+
+	Inquire				@101
+	SetCursor			@102
+	MoveCursor			@103
+	CheckCursor			@104
+
+	GetDriverResourceID	@450
+	UserRepaintDisable	@500
+
+;	InkReady			@600
+;	GetLPDevice			@601
+
+IMPORTS
+	GetPrivateProfileInt	= KERNEL.127
+	GetPrivateProfileString	= KERNEL.128
+	AllocCSToDSAlias		= KERNEL.170
