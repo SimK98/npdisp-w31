@@ -63,8 +63,10 @@ bpp: 1, 4, 8, 16, 24, 32
 
 
 ●ソースコード
+管理が大変なのでGitHubへ公開しています。
+https://github.com/SimK98/npdisp-w31
 基本的にNeko Project II本体へ処理を投げるだけの仕様です。
-Neko Project II本体側にあるwab\npdisp.cppがメインのソースです。
+実際にはNeko Project II本体のwab\npdisp.cppがメインのソースです。
 DDKサンプルにあるアイコン・カーソル・ビットマップは権利的に怪しいと思ったので
 ソースに含まれるものは自前で描き直しています。そのため本物とは若干違います。
 本物を使いたい場合は、12_RESや16_RESの中にあるアイコン・カーソル・ビットマップ
