@@ -68,6 +68,10 @@ cBegin
 		mov dx, WORD PTR lpFontInfo+2
 		mov WORD PTR npdisp_request.npdr_lpFontInfoAddr, ax
 		mov WORD PTR npdisp_request.npdr_lpFontInfoAddr+2, dx
+		mov ax, WORD PTR lpDrawMode
+		mov dx, WORD PTR lpDrawMode+2
+		mov WORD PTR npdisp_request.npdr_lpDrawModeAddr, ax
+		mov WORD PTR npdisp_request.npdr_lpDrawModeAddr+2, dx
 		mov ax, WORD PTR lpFontTrans
 		mov dx, WORD PTR lpFontTrans+2
 		mov WORD PTR npdisp_request.npdr_lpFontTransAddr, ax
