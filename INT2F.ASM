@@ -9,6 +9,7 @@ externFP FreeSelector
 
 sBegin	Data
 
+hooked_int_2Fh	db	0
 prev_int_2Fh	dd	0
 
 ; for INT2Fh
@@ -35,6 +36,11 @@ _cstods 		dw	0
 
 public	hook_int_2Fh
 hook_int_2Fh proc far
+	cmp hooked_int_2Fh, 0
+	jz .hook_int_2Fh_main
+	retf
+
+.hook_int_2Fh_main:
     push ds
     mov ax, 352Fh
     int 21h
@@ -59,6 +65,9 @@ hook_int_2Fh proc far
     mov ax, 252Fh
     int 21h
     pop ds
+    
+    mov hooked_int_2Fh, 1
+    
     retf
 hook_int_2Fh endp
 
@@ -69,12 +78,14 @@ unhook_int_2Fh proc far
     mov ax, 252Fh
     int 21h
     pop ds
+    
+    mov hooked_int_2Fh, 0
     retf
 unhook_int_2Fh endp
 
 screen_switch_hook proc far
     push    ds
-    mov     ds, [_cstods] ; Data セグメントへ
+    mov     ds, cs:[_cstods] ; Data セグメントへ
     
     cmp ax, 4001h
     je  .sendnp2
@@ -85,32 +96,22 @@ screen_switch_hook proc far
     jmp  .chain
 
 .sendnp2:
+	push si
 	push ax
+	push bx
+	push cx
 	push dx
-	mov npdisp_request.npdr_version, NPDISP_VERSION
-	mov npdisp_request.npdr_funcOrder, 0ff2fh
-	mov npdisp_request.npdr_returnCode, 0
-	mov WORD PTR npdisp_request.npdr_ax, ax
-    mov dx, 07e8h
-	mov ax, OFFSET npdisp_request
-	out dx, al
-	mov al, ah
-	out dx, al
-	mov ax, SEG npdisp_request
-	out dx, al
-	mov al, ah
-	out dx, al
+	mov si, ax
+    mov bx, 0ff2fh
+    mov cx, 0504eh
     mov dx, 07e9h
-    mov al, 'N'
-    out dx, al
-    mov al, 'P'
-    out dx, al
-    mov al, '2'
-    out dx, al
-    mov al, '1'
+    mov al, 'F'
     out dx, al
 	pop dx
+	pop cx
+	pop bx
 	pop ax
+	pop si
 	
 .chain:
     push    word ptr [prev_int_2Fh+2]  ; segment
