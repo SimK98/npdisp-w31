@@ -422,3 +422,4 @@ display.rcv
 *.res
 *.map
 *.sym
+*.drv

@@ -1,0 +1,303 @@
+[disks]
+1 =. ,"Windows 3.1 Disk #4 or #8 or #7 or SYSTEMﾃﾞｨﾚｸﾄﾘ",diskND1
+2 =. ,"Windows 3.1 Disk #2 or SYSTEMﾃﾞｨﾚｸﾄﾘ",diskND2
+3 =. ,"Windows 3.1 Disk #3 or SYSTEMﾃﾞｨﾚｸﾄﾘ",diskND3
+4 =. ,"Windows 3.1 Disk #4 or #3 or SYSTEMﾃﾞｨﾚｸﾄﾘ",diskND4
+5 =. ,"Windows 3.1 Disk #2 or #1 or SYSTEMﾃﾞｨﾚｸﾄﾘ",diskND5
+6 =. ,"Windows 3.1 Disk #2 or #3 or SYSTEMﾃﾞｨﾚｸﾄﾘ",diskND6
+7 =. ,"Windows 3.1 Disk #5 or #2 or SYSTEMﾃﾞｨﾚｸﾄﾘ",diskND7
+Z =. ,"Neko Project 21/W Display Driver Disk (12ﾄﾞｯﾄ)",diskNDz
+
+[display]
+nd6448112 = Z:npdisp.drv, "Neko Project 21/W 640x480 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd6448112
+nd6448412 = Z:npdisp.drv, "Neko Project 21/W 640x480 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd6448412
+nd6448812 = Z:npdisp.drv, "Neko Project 21/W 640x480 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd6448812
+nd64481612 = Z:npdisp.drv, "Neko Project 21/W 640x480 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd64481612
+nd64482412 = Z:npdisp.drv, "Neko Project 21/W 640x480 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd64482412
+
+nd8060112 = Z:npdisp.drv, "Neko Project 21/W 800x600 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd8060112
+nd8060412 = Z:npdisp.drv, "Neko Project 21/W 800x600 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd8060412
+nd8060812 = Z:npdisp.drv, "Neko Project 21/W 800x600 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd8060812
+nd80601612 = Z:npdisp.drv, "Neko Project 21/W 800x600 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd80601612
+nd80602412 = Z:npdisp.drv, "Neko Project 21/W 800x600 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd80602412
+
+nd10276112 = Z:npdisp.drv, "Neko Project 21/W 1024x768 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd10276112
+nd10276412 = Z:npdisp.drv, "Neko Project 21/W 1024x768 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd10276412
+nd10276812 = Z:npdisp.drv, "Neko Project 21/W 1024x768 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd10276812
+nd102761612 = Z:npdisp.drv, "Neko Project 21/W 1024x768 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd102761612
+nd102762412 = Z:npdisp.drv, "Neko Project 21/W 1024x768 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd102762412
+
+nd12880112 = Z:npdisp.drv, "Neko Project 21/W 1280x800 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd12880112
+nd12880412 = Z:npdisp.drv, "Neko Project 21/W 1280x800 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd12880412
+nd12880812 = Z:npdisp.drv, "Neko Project 21/W 1280x800 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd12880812
+nd128801612 = Z:npdisp.drv, "Neko Project 21/W 1280x800 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd128801612
+nd128802412 = Z:npdisp.drv, "Neko Project 21/W 1280x800 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd128802412
+
+nd192108112 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd192108112
+nd192108412 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd192108412
+nd192108812 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd192108812
+nd1921081612 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd1921081612
+nd1921082412 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd1921082412
+
+[nd6448112]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=640"
+,,system.ini,npdisp.drv,"height=","height=480"
+,,system.ini,npdisp.drv,"bpp=","bpp=1"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd6448412]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=640"
+,,system.ini,npdisp.drv,"height=","height=480"
+,,system.ini,npdisp.drv,"bpp=","bpp=4"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd6448812]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=640"
+,,system.ini,npdisp.drv,"height=","height=480"
+,,system.ini,npdisp.drv,"bpp=","bpp=8"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd64481612]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=640"
+,,system.ini,npdisp.drv,"height=","height=480"
+,,system.ini,npdisp.drv,"bpp=","bpp=16"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd64482412]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=640"
+,,system.ini,npdisp.drv,"height=","height=480"
+,,system.ini,npdisp.drv,"bpp=","bpp=24"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+
+[nd8060112]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=800"
+,,system.ini,npdisp.drv,"height=","height=600"
+,,system.ini,npdisp.drv,"bpp=","bpp=1"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd8060412]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=800"
+,,system.ini,npdisp.drv,"height=","height=600"
+,,system.ini,npdisp.drv,"bpp=","bpp=4"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd8060812]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=800"
+,,system.ini,npdisp.drv,"height=","height=600"
+,,system.ini,npdisp.drv,"bpp=","bpp=8"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd80601612]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=800"
+,,system.ini,npdisp.drv,"height=","height=600"
+,,system.ini,npdisp.drv,"bpp=","bpp=16"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd80602412]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=800"
+,,system.ini,npdisp.drv,"height=","height=600"
+,,system.ini,npdisp.drv,"bpp=","bpp=24"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+
+[nd10276112]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1024"
+,,system.ini,npdisp.drv,"height=","height=768"
+,,system.ini,npdisp.drv,"bpp=","bpp=1"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd10276412]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1024"
+,,system.ini,npdisp.drv,"height=","height=768"
+,,system.ini,npdisp.drv,"bpp=","bpp=4"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd10276812]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1024"
+,,system.ini,npdisp.drv,"height=","height=768"
+,,system.ini,npdisp.drv,"bpp=","bpp=8"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd102761612]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1024"
+,,system.ini,npdisp.drv,"height=","height=768"
+,,system.ini,npdisp.drv,"bpp=","bpp=16"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd102762412]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1024"
+,,system.ini,npdisp.drv,"height=","height=768"
+,,system.ini,npdisp.drv,"bpp=","bpp=24"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+
+[nd12880112]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1280"
+,,system.ini,npdisp.drv,"height=","height=800"
+,,system.ini,npdisp.drv,"bpp=","bpp=1"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd12880412]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1280"
+,,system.ini,npdisp.drv,"height=","height=800"
+,,system.ini,npdisp.drv,"bpp=","bpp=4"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd12880812]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1280"
+,,system.ini,npdisp.drv,"height=","height=800"
+,,system.ini,npdisp.drv,"bpp=","bpp=8"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd128801612]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1280"
+,,system.ini,npdisp.drv,"height=","height=800"
+,,system.ini,npdisp.drv,"bpp=","bpp=16"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd128802412]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1280"
+,,system.ini,npdisp.drv,"height=","height=800"
+,,system.ini,npdisp.drv,"bpp=","bpp=24"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+
+[nd192108112]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1920"
+,,system.ini,npdisp.drv,"height=","height=1080"
+,,system.ini,npdisp.drv,"bpp=","bpp=1"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd192108412]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1920"
+,,system.ini,npdisp.drv,"height=","height=1080"
+,,system.ini,npdisp.drv,"bpp=","bpp=4"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd192108812]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1920"
+,,system.ini,npdisp.drv,"height=","height=1080"
+,,system.ini,npdisp.drv,"bpp=","bpp=8"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd1921081612]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1920"
+,,system.ini,npdisp.drv,"height=","height=1080"
+,,system.ini,npdisp.drv,"bpp=","bpp=16"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[nd1921082412]
+3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
+,,system.ini,display,"fontsize=","fontsize=small"
+1:v86mgrn.386,0:system,system.ini,386enh,"device=v86mgrh.386","device=v86mgrn.386"
+1:vpdn.386,   0:system,system.ini,386enh,"device=vpdh.386","device=vpdn.386"
+,,system.ini,npdisp.drv,"width=","width=1920"
+,,system.ini,npdisp.drv,"height=","height=1080"
+,,system.ini,npdisp.drv,"bpp=","bpp=24"
+,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[sysfonts]
+4:sysspro.fon,"12 ﾄﾞｯﾄ ｼｽﾃﾑ ﾌｫﾝﾄ", "100,72,72"
+
+[fixedfonts]
+4:syssfix.fon,"12 ﾄﾞｯﾄ 固定 ｼｽﾃﾑ ﾌｫﾝﾄ", "100,72,72"
+
+[oemfonts]
+4:oemsfont.fon,"12 ﾄﾞｯﾄ ﾀｰﾐﾅﾙ ﾌｫﾝﾄ", "100,72,72"
