@@ -53,6 +53,13 @@ EXPORTS
 ;	InkReady			@600
 ;	GetLPDevice			@601
 
+	; for Windows 9x
+    ReEnable            @31
+	ValidateMode		@700
+
+    SelectBitmap        @29
+    BitmapBits          @30
+
 IMPORTS
 	GetPrivateProfileInt	= KERNEL.127
 	GetPrivateProfileString	= KERNEL.128

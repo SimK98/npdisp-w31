@@ -1,2 +1,2 @@
 
-NPDISP_VERSION        =   2
+NPDISP_VERSION = 2

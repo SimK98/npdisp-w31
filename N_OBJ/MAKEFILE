@@ -21,7 +21,7 @@ OBJ1 = npdisp.obj bitblt.obj bmc_main.obj charwdth.obj colorinf.obj control.obj
 OBJ2 = cursor.obj disable.obj discreen.obj enable.obj enum.obj fb.obj
 OBJ3 = output.obj pixel.obj robject.obj scanlr.obj setmode.obj svscreen.obj
 OBJ4 = textout.obj sswitch.obj int2f.obj sblt.obj setpal.obj getpal.obj
-OBJ5 = setpalt.obj getpalt.obj updcol.obj
+OBJ5 = setpalt.obj getpalt.obj updcol.obj selbmp.obj bmpbits.obj
 
 OBJ = $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5)
 
@@ -93,6 +93,11 @@ getpalt.obj: ..\getpalt.asm ..\npdisp.inc
 	$(ASM) ..\$*,$@;
 updcol.obj: ..\updcol.asm ..\npdisp.inc
 	$(ASM) ..\$*,$@;
+selbmp.obj: ..\selbmp.asm ..\npdisp.inc
+	$(ASM) ..\$*,$@;
+bmpbits.obj: ..\bmpbits.asm ..\npdisp.inc
+	$(ASM) ..\$*,$@;
+
 
 $(RES12DIR)\12_RES.res: $(RES12DIR)\12_RES.rc $(RES12DIR)\*.bmp $(RES16DIR)\*.bmp $(NAME).rcv
 	cd $(RES12DIR)
