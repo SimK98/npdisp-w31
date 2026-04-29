@@ -39,6 +39,7 @@ EXPORTS
 	UpdateColors		@26
 
 	StretchBlt			@27
+	StretchDIBits		@28
 
 	SaveScreenBitmap	@92
 

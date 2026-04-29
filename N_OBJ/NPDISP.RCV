@@ -1,7 +1,7 @@
 
 1 VERSIONINFO 
-FILEVERSION    0,8,0,0
-PRODUCTVERSION 0,8,0,0
+FILEVERSION    0,9,0,0
+PRODUCTVERSION 0,9,0,0
 FILEFLAGSMASK  0
 FILEFLAGS      0
 FILEOS         0x00010001L
@@ -12,14 +12,14 @@ BEGIN
     BEGIN
         BLOCK "041103A4"   /* LangID = Japanese, CodePage = 932 */
         BEGIN 
-            VALUE "CompanyName",     "", "\0"
+            VALUE "CompanyName",     "Neko Project II", "\0"
             VALUE "FileDescription", "Neko Project II Display Driver", "\0"
-            VALUE "FileVersion",     "0.8.0.0", "\0"
+            VALUE "FileVersion",     "0.9.0.0", "\0"
             VALUE "InternalName",    "DISPLAY", "\0"
             VALUE "LegalCopyright",  "ÇÀÇ±Ç≥ÇÒäJî≠ÇøÅ[Çﬁ", "\0"
             VALUE "OriginalFilename","npdisp.drv", "\0"
             VALUE "ProductName",     "Neko Project II Display Driver", "\0"
-            VALUE "ProductVersion",  "0.8.0.0", "\0"
+            VALUE "ProductVersion",  "0.9.0.0", "\0"
         END 
     END 
  
