@@ -18,6 +18,9 @@ npdisp_request	db	100	DUP(?)
 PUBLIC npdisp_retValue
 npdisp_retValue	dd	?
 
+PUBLIC g_isStdMode
+g_isStdMode     db  0
+
 PUBLIC g_cfgLoaded
 g_cfgLoaded     db  0
 
@@ -107,6 +110,14 @@ cBegin
 	;push	_TEXT
 	;call	GlobalSmartPageLock
 
+	mov		ax,1600h
+	int		2fh
+	test    al, 7fh
+	jnz     .is_EM_Win 
+	mov		g_isStdMode,1
+	jmp		.NoVDDApi
+	
+.is_EM_Win:
 	mov     ax,1684h ; INT 2Fh GET DEVICE API ENTRY POINT
 	mov     bx,VDD ; VDD‚ÌVxD ID
 	int     2fh ; VDD‚ÌAPI Entry Point

@@ -20,6 +20,8 @@ NPDISP_REQUEST ends
 EXTRN npdisp_request:BYTE
 EXTRN npdisp_retValue:DWORD
 
+EXTRN g_isStdMode:BYTE
+
 sEnd	Data
 
 sBegin	Code
@@ -32,6 +34,10 @@ cProc	SaveScreenBitmap,<FAR,PUBLIC,WIN,PASCAL>,<si,di>
 	parmW	wCommand
 
 cBegin
+        ; Standard ModeÇæÇ∆Ç»Ç∫Ç©ê≥èÌÇ…ìÆÇ©Ç»Ç¢ÇÃÇ≈èÌéûé∏îsàµÇ¢ 
+        xor ax, ax
+        cmp g_isStdMode, 1
+        je .skip
 
     	push ax
     	push dx
@@ -72,6 +78,7 @@ cBegin
     	LeaveCrit
     	
 		mov ax, WORD PTR npdisp_retValue
+.skip:
 cEnd
 
 sEnd	Code
