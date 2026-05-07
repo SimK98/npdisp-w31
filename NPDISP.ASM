@@ -59,6 +59,7 @@ npdr_init_dpiY				dw	?
 npdr_init_width				dw	?
 npdr_init_height			dw	?
 npdr_init_bpp				dw	?
+npdr_init_win9x				dw	? ; NPDISP_VERSION = 4 à»ç~ 
 NPDISP_REQUEST_Init ends
 
 ; for Win9x
@@ -180,6 +181,9 @@ SendNPDispInitialize proc far
 	mov npdisp_request.npdr_init_height, ax
 	mov ax, g_bpp
 	mov npdisp_request.npdr_init_bpp, ax
+	xor ax, ax
+	mov al, g_isWin9x
+	mov npdisp_request.npdr_init_win9x, ax
     mov dx, 07e8h
 	mov ax, OFFSET npdisp_request
 	out dx, al
