@@ -113,8 +113,8 @@ cBegin
 
 	mov		ax,1600h
 	int		2fh
-	test    al, 7fh
-	jnz     .is_EM_Win 
+	test	al, 7fh
+	jnz		.is_EM_Win 
 	mov		g_isStdMode,1
 	jmp		.NoVDDApi
 	

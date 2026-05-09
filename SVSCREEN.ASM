@@ -35,10 +35,11 @@ cProc	SaveScreenBitmap,<FAR,PUBLIC,WIN,PASCAL>,<si,di>
 
 cBegin
         ; Standard Mode‚¾‚Æ‚È‚º‚©³í‚É“®‚©‚È‚¢‚Ì‚Åí¸”sˆµ‚¢ 
-        xor ax, ax
         cmp g_isStdMode, 1
-        je .skip
-
+        jne .main
+        xor ax, ax
+        jmp .skip
+.main:
     	push ax
     	push dx
     	EnterCrit
