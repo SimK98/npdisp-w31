@@ -34,12 +34,6 @@ cProc	SaveScreenBitmap,<FAR,PUBLIC,WIN,PASCAL>,<si,di>
 	parmW	wCommand
 
 cBegin
-        ; Standard ModeÇæÇ∆Ç»Ç∫Ç©ê≥èÌÇ…ìÆÇ©Ç»Ç¢ÇÃÇ≈èÌéûé∏îsàµÇ¢ 
-        cmp g_isStdMode, 1
-        jne .main
-        xor ax, ax
-        jmp .skip
-.main:
     	push ax
     	push dx
     	EnterCrit
@@ -74,12 +68,11 @@ cBegin
         out dx, al
         mov al, '1'
         out dx, al
+    	LeaveCrit
     	pop dx
     	pop ax
-    	LeaveCrit
     	
 		mov ax, WORD PTR npdisp_retValue
-.skip:
 cEnd
 
 sEnd	Code

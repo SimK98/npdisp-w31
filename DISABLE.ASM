@@ -63,9 +63,9 @@ cBegin
         out dx, al
         mov al, '1'
         out dx, al
+    	LeaveCrit
     	pop dx
     	pop ax
-    	LeaveCrit
     	
 		mov ax, WORD PTR npdisp_retValue
 		
