@@ -4,25 +4,25 @@ include CMACROS.INC
 include NPDISP.INC
 .list
 
-sBegin	Data
-
-; for UpdateColors
-NPDISP_REQUEST struc
-npdr_version        	dw	?
-npdr_funcOrder      	dw	?
-npdr_returnCode     	dw	?
-npdr_reserved       	dw	?
-npdr_wStartX			dw	?
-npdr_wStartY			dw	?
-npdr_wExtX				dw	?
-npdr_wExtY				dw	?
-npdr_lpTranslate		dd	?
-NPDISP_REQUEST ends
-
-EXTRN npdisp_request:BYTE
-EXTRN npdisp_retValue:DWORD
-
-sEnd	Data
+;sBegin	Data
+;
+;; for UpdateColors
+;NPDISP_REQUEST struc
+;npdr_version        	dw	?
+;npdr_funcOrder      	dw	?
+;npdr_returnCode     	dw	?
+;npdr_reserved       	dw	?
+;npdr_wStartX			dw	?
+;npdr_wStartY			dw	?
+;npdr_wExtX				dw	?
+;npdr_wExtY				dw	?
+;npdr_lpTranslate		dd	?
+;NPDISP_REQUEST ends
+;
+;EXTRN npdisp_request:BYTE
+;EXTRN npdisp_retValue:DWORD
+;
+;sEnd	Data
 
 sBegin	Code
 assumes cs,Code
