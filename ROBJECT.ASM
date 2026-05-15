@@ -22,17 +22,17 @@ cProc	RealizeObject,<FAR,PUBLIC,WIN,PASCAL>
 cBegin <nogen>
     push bp
     mov  bp,sp
-    push si
-	push di
-    EnterCrit
+    ;push si
+	;push di
+    ;EnterCrit
     mov bx, 10
     mov cx, 0504eh
     mov dx, 07e9h
     mov al, 'F'
     out dx, al
-    LeaveCrit
-    pop  di
-    pop  si
+    ;LeaveCrit
+    ;pop  di
+    ;pop  si
     pop bp
     ret 18
 cEnd <nogen>

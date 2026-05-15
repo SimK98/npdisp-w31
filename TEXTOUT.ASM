@@ -31,17 +31,17 @@ cProc	ExtTextOut,<FAR,PUBLIC,WIN,PASCAL>
 cBegin <nogen>
     push bp
     mov  bp,sp
-    push si
-	push di
-    EnterCrit
+    ;push si
+	;push di
+    ;EnterCrit
     mov bx, 14
     mov cx, 0504eh
     mov dx, 07e9h
     mov al, 'F'
     out dx, al
-    LeaveCrit
-    pop  di
-    pop  si
+    ;LeaveCrit
+    ;pop  di
+    ;pop  si
     pop bp
     ret 40
 cEnd <nogen>
@@ -61,17 +61,17 @@ cProc	StrBlt,<FAR,PUBLIC,WIN,PASCAL>
 cBegin <nogen>
     push bp
     mov  bp,sp
-    push si
-	push di
-    EnterCrit
+    ;push si
+	;push di
+    ;EnterCrit
     mov bx, 11
     mov cx, 0504eh
     mov dx, 07e9h
     mov al, 'F'
     out dx, al
-    LeaveCrit
-    pop  di
-    pop  si
+    ;LeaveCrit
+    ;pop  di
+    ;pop  si
     pop bp
     ret 30
 cEnd <nogen>
