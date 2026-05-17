@@ -1,0 +1,49 @@
+#include <windows.h>
+#include "NPDMODE.H"
+
+APPICON ICON "NPDISP.ICO"
+
+IDD_MAIN DIALOG 20, 20, 180, 95
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Neko Project II Display Mode Utility"
+FONT 8, "MS Gothic"
+BEGIN
+    LTEXT      "幅(Width):",  -1, 10, 12, 60, 10
+    EDITTEXT   IDC_WIDTH, 70, 10, 70, 12, ES_AUTOHSCROLL
+
+    LTEXT      "高さ(Height):", -1, 10, 32, 60, 10
+    EDITTEXT   IDC_HEIGHT, 70, 30, 70, 12, ES_AUTOHSCROLL
+
+    LTEXT      "色深度(BPP):",    -1, 10, 52, 60, 10
+    COMBOBOX   IDC_BPP, 70, 50, 70, 70, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+
+    DEFPUSHBUTTON "適用", IDOK, 27, 72, 56, 14
+    PUSHBUTTON    "キャンセル", IDCANCEL, 98, 72, 56, 14
+END
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 0,13,0,0
+ PRODUCTVERSION 0,13,0,0
+ FILEOS 0x00000001L
+ FILETYPE 0x00000001L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041103A4"   /* LangID = Japanese, CodePage = 932 */
+        BEGIN
+            VALUE "CompanyName",      "Neko Project II\0"
+            VALUE "FileDescription",  "Neko Project II Display Mode Utility\0"
+            VALUE "FileVersion",      "0.13.0.0\0"
+            VALUE "InternalName",     "NPDSPCFG\0"
+            VALUE "LegalCopyright",  "ねこさん開発ちーむ", "\0"
+            VALUE "OriginalFilename", "NPDSPCFG.EXE\0"
+            VALUE "ProductName",      "Neko Project II Display Mode Utility\0"
+            VALUE "ProductVersion",   "0.13.0.0\0"
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0411, 0x03A4
+    END
+END

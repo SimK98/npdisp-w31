@@ -423,3 +423,10 @@ display.rcv
 *.map
 *.sym
 *.drv
+*.exe
+
+# VC++1.5 
+*.bsc
+*.mak
+*.vcw
+*.wsp
