@@ -35,6 +35,7 @@ HKR,,Ver
 HKR,,DevLoader
 HKR,DEFAULT
 HKR,MODES
+HKR,INFO
 HKR,CURRENT
 
 [Driver.AddReg]
@@ -46,6 +47,9 @@ HKR,DEFAULT,vdd,,"*vdd"
 HKR,DEFAULT,minivdd,,npdisp.vxd
 HKR,DEFAULT,RefreshRate,,-1
 HKR,DEFAULT,grb,,grab98.3gr
+HKR,INFO,ChipType,,"NP2 Host Graphic"
+HKR,INFO,DACType,,"NP2 Host DAC"
+HKR,INFO,Revision,,"0"
 ;HKR,"MODES\1\320,200"
 ;HKR,"MODES\1\320,240"
 ;HKR,"MODES\1\640,400"
