@@ -380,7 +380,7 @@ cBegin
 	call	dword ptr VDDEntryPoint
 	
 	cmp	eax, VDD_GET_DISPLAY_CONFIG ; eax‚ª•Ï‚í‚ç‚È‚¢‚È‚çVDD_GET_DISPLAY_CONFIGŽ©‘Ì‚ª‚È‚¢
-	je	.fromvdd_finish
+	je	.fromvdd_error
 	inc	ax ; ax‚ª-1‚È‚çŽ¸”s
 	jz	.fromvdd_finish
 	
@@ -397,6 +397,12 @@ cBegin
 	
 	mov	g_DpiX, ax
 	mov	g_DpiY, ax
+	
+	jmp .fromvdd_finish
+	
+.fromvdd_error:
+	mov		g_isWin9x,0
+	
 .fromvdd_finish:
 
 cEnd
