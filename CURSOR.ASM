@@ -33,20 +33,20 @@ cEnd <nogen>
 
 cProc	CheckCursor, <FAR,PUBLIC>
 cBegin <nogen>
-    push bp
-    mov  bp,sp
-    ;push si
-	;push di
-    ;EnterCrit
-    mov bx, 104
-    mov cx, 0504eh
-    mov dx, 07e9h
-    mov al, 'F'
-    out dx, al
-    ;LeaveCrit
-    ;pop  di
-    ;pop  si
-    pop bp
+    ;push bp
+    ;mov  bp,sp
+    ;;push si
+	;;push di
+    ;;EnterCrit
+    ;mov bx, 104
+    ;mov cx, 0504eh
+    ;mov dx, 07e9h
+    ;mov al, 'F'
+    ;out dx, al
+    ;;LeaveCrit
+    ;;pop  di
+    ;;pop  si
+    ;pop bp
     ret 0
 cEnd <nogen>
 

@@ -17,6 +17,10 @@ PUBLIC npdisp_request
 npdisp_request	db	100	DUP(?)
 PUBLIC npdisp_retValue
 npdisp_retValue	dd	?
+PUBLIC npdisp_bmpinfo
+npdisp_bmpinfo	db	1160	DUP(?)
+PUBLIC npdisp_dcibuf
+npdisp_dcibuf	db	96	DUP(?)
 
 PUBLIC g_isStdMode
 g_isStdMode     db  0
@@ -60,6 +64,14 @@ npdr_init_width				dw	?
 npdr_init_height			dw	?
 npdr_init_bpp				dw	?
 npdr_init_win9x				dw	? ; NPDISP_VERSION = 4 à»ç~ 
+npdr_init_bmpinfo			dd	? ; NPDISP_VERSION = 5 à»ç~ 
+npdr_init_beginAccess		dd	? ; NPDISP_VERSION = 5 à»ç~ 
+npdr_init_endAccess			dd	? ; NPDISP_VERSION = 5 à»ç~ 
+npdr_init_dcibuf			dd	? ; NPDISP_VERSION = 5 à»ç~ 
+npdr_init_dciBeginAccess	dd	? ; NPDISP_VERSION = 5 à»ç~ 
+npdr_init_dciEndAccess		dd	? ; NPDISP_VERSION = 5 à»ç~ 
+npdr_init_dciDestroySurface	dd	? ; NPDISP_VERSION = 5 à»ç~ 
+npdr_init_vramLinearAddr	dd	? ; NPDISP_VERSION = 5 à»ç~ 
 NPDISP_REQUEST_Init ends
 
 ; for Win9x
@@ -141,6 +153,43 @@ cBegin
     mov     ax,1                    ;initialization successful.
 cEnd
 
+Align 16
+cProc	BeginAccess,<FAR,PUBLIC,PASCAL,NODATA>,<si,di>
+	parmD	lpDevice
+	parmW	Left
+	parmW	Top
+	parmW	Right
+	parmW	Bottom
+	parmW	Flags
+cBegin
+	mov ax, Flags
+cEnd
+Align 16
+cProc	EndAccess,<FAR,PUBLIC,PASCAL,NODATA>,<si,di>
+	parmD	lpDevice
+	parmW	Flags
+cBegin
+	mov ax, Flags
+cEnd
+
+Align 16
+cProc	DCIBeginAccess,<FAR,PUBLIC,PASCAL,NODATA>,<si,di>
+	parmD	lpDevice
+	parmD	lpRect
+cBegin
+	xor ax, ax
+cEnd
+Align 16
+cProc	DCIEndAccess,<FAR,PUBLIC,PASCAL,NODATA>,<si,di>
+	parmD	lpDevice
+cBegin
+cEnd
+Align 16
+cProc	DCIDestroySurface,<FAR,PUBLIC,PASCAL,NODATA>,<si,di>
+	parmD	lpDevice
+cBegin
+cEnd
+
 public	SendNPDispInitialize
 SendNPDispInitialize proc far
 
@@ -165,6 +214,15 @@ SendNPDispInitialize proc far
 ;npdr_init_width			dw	?
 ;npdr_init_height			dw	?
 ;npdr_init_bpp				dw	?
+;npdr_init_win9x			dw	? ; NPDISP_VERSION = 4 à»ç~ 
+;npdr_init_bmpinfo			dd	? ; NPDISP_VERSION = 5 à»ç~ 
+;npdr_init_beginAccess		dd	? ; NPDISP_VERSION = 5 à»ç~ 
+;npdr_init_endAccess		dd	? ; NPDISP_VERSION = 5 à»ç~ 
+;npdr_init_dcibuf			dd	? ; NPDISP_VERSION = 5 à»ç~ 
+;npdr_init_dciBeginAccess	dd	? ; NPDISP_VERSION = 5 à»ç~ 
+;npdr_init_dciEndAccess		dd	? ; NPDISP_VERSION = 5 à»ç~ 
+;npdr_init_dciDestroySurface	dd	? ; NPDISP_VERSION = 5 à»ç~ 
+;npdr_init_vramLinearAddr		dd	? ; NPDISP_VERSION = 5 à»ç~ 
 ;NPDISP_REQUEST_Init ends
 
 	EnterCrit
@@ -184,6 +242,38 @@ SendNPDispInitialize proc far
 	xor ax, ax
 	mov al, g_isWin9x
 	mov npdisp_request.npdr_init_win9x, ax
+    mov WORD PTR npdisp_request.npdr_init_bmpinfo, OFFSET npdisp_bmpinfo
+    mov WORD PTR npdisp_request.npdr_init_bmpinfo+2, SEG npdisp_bmpinfo
+    mov WORD PTR npdisp_request.npdr_init_beginAccess, OFFSET BeginAccess
+    mov WORD PTR npdisp_request.npdr_init_beginAccess+2, SEG BeginAccess
+    mov WORD PTR npdisp_request.npdr_init_endAccess, OFFSET EndAccess
+    mov WORD PTR npdisp_request.npdr_init_endAccess+2, SEG EndAccess
+    mov WORD PTR npdisp_request.npdr_init_dcibuf, OFFSET npdisp_dcibuf
+    mov WORD PTR npdisp_request.npdr_init_dcibuf+2, SEG npdisp_dcibuf
+    mov WORD PTR npdisp_request.npdr_init_dciBeginAccess, OFFSET DCIBeginAccess
+    mov WORD PTR npdisp_request.npdr_init_dciBeginAccess+2, SEG DCIBeginAccess
+    mov WORD PTR npdisp_request.npdr_init_dciEndAccess, OFFSET DCIEndAccess
+    mov WORD PTR npdisp_request.npdr_init_dciEndAccess+2, SEG DCIEndAccess
+    mov WORD PTR npdisp_request.npdr_init_dciDestroySurface, OFFSET DCIDestroySurface
+    mov WORD PTR npdisp_request.npdr_init_dciDestroySurface+2, SEG DCIDestroySurface
+
+	push bx
+	push cx
+	push si
+	push di
+	mov ax, 0800h
+	mov bx, 0c000h
+	mov cx, 00000h
+	mov si, 01000h
+	mov di, 00000h
+	int 31h
+    mov WORD PTR npdisp_request.npdr_init_vramLinearAddr, cx
+    mov WORD PTR npdisp_request.npdr_init_vramLinearAddr+2, bx
+	pop di
+	pop si
+	pop cx
+	pop bx
+
     mov dx, 07e8h
 	mov ax, OFFSET npdisp_request
 	out dx, al
