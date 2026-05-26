@@ -72,6 +72,7 @@ npdr_init_dciBeginAccess	dd	? ; NPDISP_VERSION = 5 à»ç~
 npdr_init_dciEndAccess		dd	? ; NPDISP_VERSION = 5 à»ç~ 
 npdr_init_dciDestroySurface	dd	? ; NPDISP_VERSION = 5 à»ç~ 
 npdr_init_vramLinearAddr	dd	? ; NPDISP_VERSION = 5 à»ç~ 
+npdr_init_vramPhysicalAddr	dd	? ; NPDISP_VERSION = 5 à»ç~ 
 NPDISP_REQUEST_Init ends
 
 ; for Win9x
@@ -173,22 +174,48 @@ cBegin
 cEnd
 
 Align 16
-cProc	DCIBeginAccess,<FAR,PUBLIC,PASCAL,NODATA>,<si,di>
-	parmD	lpDevice
-	parmD	lpRect
-cBegin
-	xor ax, ax
-cEnd
+cProc	DCIBeginAccess, <PUBLIC, FAR>
+;        parmD	lpDevice
+;        parmD	lpRect
+cBegin <nogen>
+    push bp
+    mov  bp,sp
+    mov bx, 0fe00h
+    mov cx, 0504eh
+    mov dx, 07e9h
+    mov al, 'F'
+    out dx, al
+    pop bp
+    ret 8
+cEnd <nogen>
 Align 16
-cProc	DCIEndAccess,<FAR,PUBLIC,PASCAL,NODATA>,<si,di>
-	parmD	lpDevice
-cBegin
-cEnd
+cProc	DCIEndAccess, <PUBLIC, FAR>
+;        parmD	lpDevice
+cBegin <nogen>
+    push bp
+    mov  bp,sp
+    mov bx, 0fe01h
+    mov cx, 0504eh
+    mov dx, 07e9h
+    mov al, 'F'
+    out dx, al
+    pop bp
+    ret 4
+cEnd <nogen>
 Align 16
-cProc	DCIDestroySurface,<FAR,PUBLIC,PASCAL,NODATA>,<si,di>
-	parmD	lpDevice
-cBegin
-cEnd
+cProc	DCIDestroySurface, <PUBLIC, FAR>
+;        parmD	lpDevice
+cBegin <nogen>
+    push bp
+    mov  bp,sp
+    mov bx, 0fe02h
+    mov cx, 0504eh
+    mov dx, 07e9h
+    mov al, 'F'
+    out dx, al
+    pop bp
+    ret 4
+cEnd <nogen>
 
 public	SendNPDispInitialize
 SendNPDispInitialize proc far
@@ -222,8 +249,28 @@ SendNPDispInitialize proc far
 ;npdr_init_dciBeginAccess	dd	? ; NPDISP_VERSION = 5 à»ç~ 
 ;npdr_init_dciEndAccess		dd	? ; NPDISP_VERSION = 5 à»ç~ 
 ;npdr_init_dciDestroySurface	dd	? ; NPDISP_VERSION = 5 à»ç~ 
-;npdr_init_vramLinearAddr		dd	? ; NPDISP_VERSION = 5 à»ç~ 
+;npdr_init_vramLinearAddr	dd	? ; NPDISP_VERSION = 5 à»ç~ 
+;npdr_init_vramPhysicalAddr	dd	? ; NPDISP_VERSION = 5 à»ç~ 
 ;NPDISP_REQUEST_Init ends
+
+	push bx
+	push cx
+	push si
+	push di
+	mov ax, 0800h
+	mov bx, NPDISP_VRAMADDR_H
+	mov cx, NPDISP_VRAMADDR_L
+    mov WORD PTR npdisp_request.npdr_init_vramPhysicalAddr, cx
+    mov WORD PTR npdisp_request.npdr_init_vramPhysicalAddr+2, bx
+	mov si, NPDISP_VRAMSIZE_H
+	mov di, NPDISP_VRAMSIZE_L
+	int 31h
+    mov WORD PTR npdisp_request.npdr_init_vramLinearAddr, cx
+    mov WORD PTR npdisp_request.npdr_init_vramLinearAddr+2, bx
+	pop di
+	pop si
+	pop cx
+	pop bx
 
 	EnterCrit
 	mov npdisp_request.npdr_init_version, NPDISP_VERSION
@@ -256,23 +303,6 @@ SendNPDispInitialize proc far
     mov WORD PTR npdisp_request.npdr_init_dciEndAccess+2, SEG DCIEndAccess
     mov WORD PTR npdisp_request.npdr_init_dciDestroySurface, OFFSET DCIDestroySurface
     mov WORD PTR npdisp_request.npdr_init_dciDestroySurface+2, SEG DCIDestroySurface
-
-	push bx
-	push cx
-	push si
-	push di
-	mov ax, 0800h
-	mov bx, 0c000h
-	mov cx, 00000h
-	mov si, 01000h
-	mov di, 00000h
-	int 31h
-    mov WORD PTR npdisp_request.npdr_init_vramLinearAddr, cx
-    mov WORD PTR npdisp_request.npdr_init_vramLinearAddr+2, bx
-	pop di
-	pop si
-	pop cx
-	pop bx
 
     mov dx, 07e8h
 	mov ax, OFFSET npdisp_request
