@@ -155,23 +155,39 @@ cBegin
 cEnd
 
 Align 16
-cProc	BeginAccess,<FAR,PUBLIC,PASCAL,NODATA>,<si,di>
-	parmD	lpDevice
-	parmW	Left
-	parmW	Top
-	parmW	Right
-	parmW	Bottom
-	parmW	Flags
-cBegin
-	mov ax, Flags
-cEnd
+cProc	BeginAccess, <PUBLIC, FAR>
+;	parmD	lpDevice
+;	parmW	Left
+;	parmW	Top
+;	parmW	Right
+;	parmW	Bottom
+;	parmW	Flags
+cBegin <nogen>
+    push bp
+    mov  bp,sp
+    mov bx, 0fefeh
+    mov cx, 0504eh
+    mov dx, 07e9h
+    mov al, 'F'
+    out dx, al
+    pop bp
+    ret 14
+cEnd <nogen>
 Align 16
-cProc	EndAccess,<FAR,PUBLIC,PASCAL,NODATA>,<si,di>
-	parmD	lpDevice
-	parmW	Flags
-cBegin
-	mov ax, Flags
-cEnd
+cProc	EndAccess, <PUBLIC, FAR>
+;	parmD	lpDevice
+;	parmW	Flags
+cBegin <nogen>
+    push bp
+    mov  bp,sp
+    mov bx, 0feffh
+    mov cx, 0504eh
+    mov dx, 07e9h
+    mov al, 'F'
+    out dx, al
+    pop bp
+    ret 6
+cEnd <nogen>
 
 Align 16
 cProc	DCIBeginAccess, <PUBLIC, FAR>
