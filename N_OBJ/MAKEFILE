@@ -118,7 +118,7 @@ $(NAME).map
 libw
 $(NAME).def
 <<
-	rc -b $(RESFILE) $(NAME).drv
+	rc -b -30 $(RESFILE) $(NAME).drv
 	copy $(NAME).map display.map
 	-mapsym /n display
 	-del $(NAME).sym
