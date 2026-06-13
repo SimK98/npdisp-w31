@@ -49,7 +49,7 @@ static void AddBppItem(HWND hwnd, LPCSTR text, int value)
     }
 }
 
-BOOL CALLBACK MainDlgProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+BOOL CALLBACK __export MainDlgProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
     switch (msg)
     {
@@ -132,38 +132,44 @@ BOOL CALLBACK MainDlgProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 
     return FALSE;
 }
-
+          
 static void LoadCurrentSettings(HWND hwnd)
-{
-    char buf[64];
-
-    GetPrivateProfileString(
+{      
+    char buf[64];                  
+    
+    if(GetPrivateProfileString(
         "npdisp.drv",
         "width",
         "640",
         buf,
         sizeof(buf),
-        SYSTEM_INI);
-
+        SYSTEM_INI)==0) {  
+    	buf[0] = '\0';
+    }
+    
     SetDlgItemText(hwnd, IDC_WIDTH, buf);
-
-    GetPrivateProfileString(
+    
+    if(GetPrivateProfileString(
         "npdisp.drv",
         "height",
         "480",
         buf,
         sizeof(buf),
-        SYSTEM_INI);
+   		SYSTEM_INI)==0) {  
+    	buf[0] = '\0';
+    }
 
     SetDlgItemText(hwnd, IDC_HEIGHT, buf);
-
-    GetPrivateProfileString(
+    
+    if(GetPrivateProfileString(
         "npdisp.drv",
         "bpp",
         "8",
         buf,
         sizeof(buf),
-        SYSTEM_INI);
+    	SYSTEM_INI)==0) {  
+    	buf[0] = '\0';
+    }
 
     SetDlgItemText(hwnd, IDC_BPP, buf);
 }
@@ -359,6 +365,8 @@ int PASCAL WinMain(
     LPSTR lpCmdLine,
     int nCmdShow)
 {
+	FARPROC lpfnDlg;
+	
     if (hPrev)
     {
         MessageBox(
@@ -375,11 +383,14 @@ int PASCAL WinMain(
     if (!CheckCurrentDriver())
         return 0;
 
+	lpfnDlg = MakeProcInstance((FARPROC)MainDlgProc, hInst);
     DialogBox(
         hInst,
         MAKEINTRESOURCE(IDD_MAIN),
         NULL,
-        MainDlgProc);
+        lpfnDlg);
+    
+    FreeProcInstance((FARPROC)MainDlgProc);
 
     return 0;
 }
