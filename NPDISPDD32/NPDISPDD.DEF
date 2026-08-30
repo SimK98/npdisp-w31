@@ -1,0 +1,4 @@
+LIBRARY NPDISPDD
+DESCRIPTION 'NPDISP DirectDraw initialization bridge'
+EXPORTS
+    DriverInit=_DriverInit@4

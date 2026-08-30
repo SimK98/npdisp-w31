@@ -65,3 +65,4 @@ IMPORTS
 	GetPrivateProfileInt	= KERNEL.127
 	GetPrivateProfileString	= KERNEL.128
 	AllocCSToDSAlias		= KERNEL.170
+	GetExePtr			= KERNEL.133

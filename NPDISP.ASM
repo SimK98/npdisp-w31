@@ -10,6 +10,7 @@ VDD_GET_DISPLAY_CONFIG = 85h
 
 externFP  GetPrivateProfileString
 externFP  GetPrivateProfileInt
+externFP  GetExePtr
 
 sBegin	Data
 
@@ -22,6 +23,29 @@ npdisp_bmpinfo	db	1160	DUP(?)
 PUBLIC npdisp_dcibuf
 npdisp_dcibuf	db	96	DUP(?)
 
+; DirectDraw HALのコールバックテーブル。DriverInitが32bit側の入口を設定する。
+PUBLIC npdisp_ddCallbacks
+npdisp_ddCallbacks	db	48	DUP(0)
+PUBLIC npdisp_ddSurfaceCallbacks
+npdisp_ddSurfaceCallbacks	db	64	DUP(0)
+; パレットアクセラレーション未使用時も、DirectDrawへサイズだけを設定したテーブルを渡す。
+PUBLIC npdisp_ddPaletteCallbacks
+npdisp_ddPaletteCallbacks	db	16	DUP(0)
+; DDHALINFOは固定共有Dataセグメントに置き、np21/wが内容を設定する。
+; DDNEWCALLBACKFNSで受け取ったlpSetInfoへControlから渡す。
+PUBLIC npdisp_ddHalInfo
+npdisp_ddHalInfo	db	460	DUP(0)
+; EnumDisplayModes用のモード表。最大128個を確保し、np21/wが内容と現在モードを設定する。
+PUBLIC npdisp_ddModeInfo
+npdisp_ddModeInfo	db	(36 * 128)	DUP(0)
+; DirectDrawの固定オフスクリーン領域を示すビデオメモリヒープ情報。
+PUBLIC npdisp_ddVidMem
+npdisp_ddVidMem	db	24	DUP(0)
+PUBLIC npdisp_ddSetInfo
+npdisp_ddSetInfo	dd	0
+PUBLIC npdisp_ddHInstance
+npdisp_ddHInstance	dw	0
+
 PUBLIC g_isStdMode
 g_isStdMode     db  0
 
@@ -30,6 +54,13 @@ g_cfgLoaded     db  0
 
 PUBLIC g_isWin9x
 g_isWin9x       db  0
+
+; Win9xのDCIから参照できるVRAM用プロテクトモードセレクタ。
+PUBLIC npdisp_vramSelector
+npdisp_vramSelector dw  0
+; DirectDrawサーフェスのアドレスを維持するため、VRAMのDPMIマッピングはReEnable後も再利用する。
+PUBLIC npdisp_vramLinearAddr
+npdisp_vramLinearAddr dd 0
 
 szSystemIni		db	"system.ini",0
 szBootDesc      db  'boot.description',0
@@ -57,7 +88,7 @@ NPDISP_REQUEST_Init struc
 npdr_init_version   		dw	?
 npdr_init_funcOrder 		dw	?
 npdr_init_returnCode		dw	?
-npdr_init_reserved  		dw	?
+npdr_init_reserved  		dw	? ; NPDISP_VERSION = 8 or later: VRAM selector on Win9x
 npdr_init_dpiX				dw	?
 npdr_init_dpiY				dw	?
 npdr_init_width				dw	?
@@ -73,6 +104,12 @@ npdr_init_dciEndAccess		dd	? ; NPDISP_VERSION = 5 以降
 npdr_init_dciDestroySurface	dd	? ; NPDISP_VERSION = 5 以降 
 npdr_init_vramLinearAddr	dd	? ; NPDISP_VERSION = 5 以降 
 npdr_init_vramPhysicalAddr	dd	? ; NPDISP_VERSION = 5 以降 
+npdr_init_ddCallbacksAddr		dd	? ; NPDISP_VERSION = 6 or later
+npdr_init_ddSurfaceCallbacksAddr	dd	? ; NPDISP_VERSION = 6 or later
+npdr_init_ddHalInfoAddr			dd	? ; NPDISP_VERSION = 7 or later
+npdr_init_ddModeInfoAddr		dd	? ; NPDISP_VERSION = 9 or later
+npdr_init_ddPaletteCallbacksAddr	dd	? ; NPDISP_VERSION = 10 or later
+npdr_init_ddVidMemAddr			dd	? ; NPDISP_VERSION = 12 or later
 NPDISP_REQUEST_Init ends
 
 ; for Win9x
@@ -121,6 +158,8 @@ assumes es,nothing
 ;-----------------------------------------------------------------------
 cProc   DriverInit,<FAR,PUBLIC,WIN>,<si,di>
 cBegin
+	; Win16 DriverInitで渡されるモジュールハンドルを保持する。
+	mov		npdisp_ddHInstance,di
 	;push	_TEXT
 	;call	GlobalSmartPageLock
 
@@ -146,6 +185,20 @@ cBegin
 	mov     OurVMHandle,bx
 	
 	mov		g_isWin9x,1
+
+	; ファイル上はWindows 3.x互換のまま、Win9xではロード済みNEヘッダの
+	; expected Windows versionを4.00へ上げてDirectDraw対応ドライバとして公開する。
+	push	es
+	push	npdisp_ddHInstance
+	call	GetExePtr
+	or		ax,ax
+	jz		short .NoWin9xHeaderPatch
+	mov		es,ax
+	cmp		word ptr es:[003eh],0400h
+	jae		short .NoWin9xHeaderPatch
+	mov		word ptr es:[003eh],0400h
+.NoWin9xHeaderPatch:
+	pop		es
 
 .NoVDDApi:
 
@@ -233,6 +286,36 @@ cBegin <nogen>
     ret 4
 cEnd <nogen>
 
+; DirectDraw終了時にlpSetInfoの保持状態を破棄する。
+Align 16
+cProc	DDDestroyDriver, <PUBLIC, FAR>
+;        parmD lpData
+cBegin <nogen>
+    push bp
+    mov  bp,sp
+    push si
+    push ds
+    push es
+    mov  ax, SEG npdisp_ddSetInfo
+    mov  ds, ax
+    les  si, DWORD PTR ss:[bp+6]
+    mov  ax, es
+    or   ax, si
+    jz   .dddestroy_done
+    mov  WORD PTR es:[si+4], 0
+    mov  WORD PTR es:[si+6], 0
+.dddestroy_done:
+    mov  WORD PTR npdisp_ddSetInfo, 0
+    mov  WORD PTR npdisp_ddSetInfo+2, 0
+    pop  es
+    pop  ds
+    pop  si
+    mov  ax, 1
+    xor  dx, dx
+    pop  bp
+    ret  4
+cEnd <nogen>
+
 public	SendNPDispInitialize
 SendNPDispInitialize proc far
 
@@ -241,6 +324,9 @@ SendNPDispInitialize proc far
 	
 	call far ptr LoadDisplaySettingsFromSystemIni
 	
+	; protocol v8以降ではreservedにWin9x用VRAMセレクタを渡す。
+	mov WORD PTR npdisp_request.npdr_init_reserved, 0
+
 	; Win9xならVDDから取得 
 	cmp g_isWin9x, 1
 	jne .loadSettingsEnd
@@ -267,24 +353,99 @@ SendNPDispInitialize proc far
 ;npdr_init_dciDestroySurface	dd	? ; NPDISP_VERSION = 5 以降 
 ;npdr_init_vramLinearAddr	dd	? ; NPDISP_VERSION = 5 以降 
 ;npdr_init_vramPhysicalAddr	dd	? ; NPDISP_VERSION = 5 以降 
+;npdr_init_ddCallbacksAddr		dd	? ; NPDISP_VERSION = 6以降
+;npdr_init_ddSurfaceCallbacksAddr	dd	? ; NPDISP_VERSION = 6以降
+;npdr_init_ddHalInfoAddr			dd	? ; NPDISP_VERSION = 7以降
+;npdr_init_ddModeInfoAddr		dd	? ; NPDISP_VERSION = 9以降
 ;NPDISP_REQUEST_Init ends
 
 	push bx
 	push cx
+	push dx
 	push si
 	push di
-	mov ax, 0800h
 	mov bx, NPDISP_VRAMADDR_H
 	mov cx, NPDISP_VRAMADDR_L
     mov WORD PTR npdisp_request.npdr_init_vramPhysicalAddr, cx
     mov WORD PTR npdisp_request.npdr_init_vramPhysicalAddr+2, bx
+
+    ; ReEnableでサーフェスアドレスが変わらないよう、256MiBのVRAM領域は一度だけマップする。
+    mov bx, WORD PTR npdisp_vramLinearAddr+2
+    mov cx, WORD PTR npdisp_vramLinearAddr
+    mov ax, bx
+    or  ax, cx
+    jnz .vramMapReady
+
+	mov ax, 0800h
+	mov bx, NPDISP_VRAMADDR_H
+	mov cx, NPDISP_VRAMADDR_L
 	mov si, NPDISP_VRAMSIZE_H
 	mov di, NPDISP_VRAMSIZE_L
 	int 31h
+    jnc .vramMapMapped
+    jmp .vramMapFailed
+.vramMapMapped:
+    mov WORD PTR npdisp_vramLinearAddr, cx
+    mov WORD PTR npdisp_vramLinearAddr+2, bx
+.vramMapReady:
     mov WORD PTR npdisp_request.npdr_init_vramLinearAddr, cx
     mov WORD PTR npdisp_request.npdr_init_vramLinearAddr+2, bx
+
+    ; 32bit HAL用のlinear mappingに加え、Win9xのDCIから参照するLDTセレクタを用意する。
+    cmp g_isWin9x, 1
+    je  .vramSelectorSetup
+    jmp .vramSelectorDone
+.vramSelectorSetup:
+
+    push bx                         ; mapped linear base high word
+    push cx                         ; mapped linear base low word
+    mov bx, npdisp_vramSelector
+    or  bx, bx
+    jnz .vramSelectorHave
+    mov ax, 0000h                   ; DPMI: Allocate LDT Descriptors
+    mov cx, 1
+    int 31h
+    jc  .vramSelectorAllocFailed
+    mov bx, ax
+    mov npdisp_vramSelector, bx
+.vramSelectorHave:
+    pop dx                          ; linear base low word
+    pop cx                          ; linear base high word
+    mov ax, 0007h                   ; DPMI: Set Segment Base Address
+    int 31h
+    jc  .vramSelectorSetupFailed
+    mov ax, 0008h                   ; DPMI: Set Segment Limit (256 MiB - 1)
+    mov cx, 0fffh
+    mov dx, 0ffffh
+    int 31h
+    jc  .vramSelectorSetupFailed
+    mov ax, npdisp_vramSelector
+    mov npdisp_request.npdr_init_reserved, ax
+    jmp .vramSelectorDone
+
+.vramSelectorAllocFailed:
+    add sp, 4                       ; discard saved linear base
+    jmp .vramSelectorUnavailable
+.vramSelectorSetupFailed:
+    ; 設定途中で失敗したセレクタは公開しない。
+    mov bx, npdisp_vramSelector
+    or  bx, bx
+    jz  .vramSelectorUnavailable
+    mov ax, 0001h                   ; DPMI: Free LDT Descriptor
+    int 31h
+    mov WORD PTR npdisp_vramSelector, 0
+.vramSelectorUnavailable:
+    mov WORD PTR npdisp_request.npdr_init_reserved, 0
+    jmp .vramSelectorDone
+
+.vramMapFailed:
+    mov WORD PTR npdisp_request.npdr_init_vramLinearAddr, 0
+    mov WORD PTR npdisp_request.npdr_init_vramLinearAddr+2, 0
+    mov WORD PTR npdisp_request.npdr_init_reserved, 0
+.vramSelectorDone:
 	pop di
 	pop si
+	pop dx
 	pop cx
 	pop bx
 
@@ -319,6 +480,57 @@ SendNPDispInitialize proc far
     mov WORD PTR npdisp_request.npdr_init_dciEndAccess+2, SEG DCIEndAccess
     mov WORD PTR npdisp_request.npdr_init_dciDestroySurface, OFFSET DCIDestroySurface
     mov WORD PTR npdisp_request.npdr_init_dciDestroySurface+2, SEG DCIDestroySurface
+
+    ; DirectDraw使用中のcallback tableはReEnableでも維持する。
+    mov ax, WORD PTR npdisp_ddSetInfo
+    or  ax, WORD PTR npdisp_ddSetInfo+2
+    jz  .ddCallbacksInit
+    jmp .ddCallbacksReady
+.ddCallbacksInit:
+
+    ; 新しいDirectDrawオブジェクトではcallback tableを全消去し、古いDLLアドレスを残さない。
+    push es
+    push di
+    push cx
+    mov ax, ds
+    mov es, ax
+    xor ax, ax
+    cld
+    mov di, OFFSET npdisp_ddCallbacks
+    mov cx, 24
+    rep stosw
+    mov di, OFFSET npdisp_ddSurfaceCallbacks
+    mov cx, 32
+    rep stosw
+    mov di, OFFSET npdisp_ddPaletteCallbacks
+    mov cx, 8
+    rep stosw
+    pop cx
+    pop di
+    pop es
+
+    ; DestroyDriverだけはlpSetInfoの寿命を管理するためWin16側に置く。
+    mov WORD PTR npdisp_ddCallbacks, 48
+    mov WORD PTR npdisp_ddCallbacks+8, OFFSET DDDestroyDriver
+    mov WORD PTR npdisp_ddCallbacks+10, SEG DDDestroyDriver
+    mov WORD PTR npdisp_ddSurfaceCallbacks, 64
+
+    ; パレットcallback tableはDriverInitまでサイズだけを設定する。
+    mov WORD PTR npdisp_ddPaletteCallbacks, 16
+.ddCallbacksReady:
+
+    mov WORD PTR npdisp_request.npdr_init_ddCallbacksAddr, OFFSET npdisp_ddCallbacks
+    mov WORD PTR npdisp_request.npdr_init_ddCallbacksAddr+2, SEG npdisp_ddCallbacks
+    mov WORD PTR npdisp_request.npdr_init_ddSurfaceCallbacksAddr, OFFSET npdisp_ddSurfaceCallbacks
+    mov WORD PTR npdisp_request.npdr_init_ddSurfaceCallbacksAddr+2, SEG npdisp_ddSurfaceCallbacks
+    mov WORD PTR npdisp_request.npdr_init_ddHalInfoAddr, OFFSET npdisp_ddHalInfo
+    mov WORD PTR npdisp_request.npdr_init_ddHalInfoAddr+2, SEG npdisp_ddHalInfo
+    mov WORD PTR npdisp_request.npdr_init_ddModeInfoAddr, OFFSET npdisp_ddModeInfo
+    mov WORD PTR npdisp_request.npdr_init_ddModeInfoAddr+2, SEG npdisp_ddModeInfo
+    mov WORD PTR npdisp_request.npdr_init_ddPaletteCallbacksAddr, OFFSET npdisp_ddPaletteCallbacks
+    mov WORD PTR npdisp_request.npdr_init_ddPaletteCallbacksAddr+2, SEG npdisp_ddPaletteCallbacks
+    mov WORD PTR npdisp_request.npdr_init_ddVidMemAddr, OFFSET npdisp_ddVidMem
+    mov WORD PTR npdisp_request.npdr_init_ddVidMemAddr+2, SEG npdisp_ddVidMem
 
     mov dx, 07e8h
 	mov ax, OFFSET npdisp_request

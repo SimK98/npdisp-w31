@@ -14,6 +14,7 @@ Driver.Copy = 11
 [SourceDisksFiles]
 npdisp.drv=1
 npdisp.vxd=1
+npdispdd.dll=1
 
 [Manufacturer]
 %Mfg%=Mfg
@@ -29,6 +30,7 @@ AddReg=Driver.AddReg
 [Driver.Copy]
 npdisp.drv
 npdisp.vxd
+npdispdd.dll
 
 [Prev.DelReg]
 HKR,,Ver

@@ -10,6 +10,8 @@ externFP hook_int_2Fh
 externFP unhook_int_2Fh
 
 externFP SendNPDispInitialize
+EXTRN npdisp_ddSetInfo:DWORD
+EXTRN npdisp_ddHalInfo:BYTE
 
 sBegin	Data
 
@@ -173,27 +175,22 @@ cProc	ReEnable,<FAR,PUBLIC,WIN,PASCAL>,<si,di>
         parmD   lpGDIInfo
 cBegin
 
-;NPDISP_REQUEST_ReEnable struc
-;npdr_re_version         dw ?
-;npdr_re_funcOrder       dw ?
-;npdr_re_returnCode      dw ?
-;npdr_re_reserved        dw ?
-;npdr_re_lpRetValueAddr	dd	?
-;npdr_re_lpPDeviceAddr	dd	?
-;npdr_re_lpGDIInfoAddr	dd	?
-;NPDISP_REQUEST_ReEnable ends
+		; ReEnableは呼び出し側のDSで入るため、NPDISPの共有Dataセグメントへ切り替える。
+		push ds
+		mov  ax, SEG npdisp_ddSetInfo
+		mov  ds, ax
 
-		; 初期化を再送信 
+		; モード情報とVRAM mappingを更新する。DirectDraw使用中のcallback tableは維持される。
 		call far ptr SendNPDispInitialize
 
-    	EnterCrit
-    	mov npdisp_request.npdr_version, NPDISP_VERSION
-    	mov npdisp_request.npdr_funcOrder, 31
-    	mov npdisp_request.npdr_returnCode, 0
-    	mov WORD PTR npdisp_retValue, 0
-    	mov WORD PTR npdisp_retValue+2, 0
-    	mov WORD PTR npdisp_request.npdr_enable_lpRetValueAddr, OFFSET npdisp_retValue
-    	mov WORD PTR npdisp_request.npdr_enable_lpRetValueAddr+2, SEG npdisp_retValue
+		EnterCrit
+		mov npdisp_request.npdr_version, NPDISP_VERSION
+		mov npdisp_request.npdr_funcOrder, 31
+		mov npdisp_request.npdr_returnCode, 0
+		mov WORD PTR npdisp_retValue, 0
+		mov WORD PTR npdisp_retValue+2, 0
+		mov WORD PTR npdisp_request.npdr_re_lpRetValueAddr, OFFSET npdisp_retValue
+		mov WORD PTR npdisp_request.npdr_re_lpRetValueAddr+2, SEG npdisp_retValue
 		mov ax, WORD PTR lpPDevice
 		mov dx, WORD PTR lpPDevice+2
 		mov WORD PTR npdisp_request.npdr_re_lpPDeviceAddr, ax
@@ -202,30 +199,50 @@ cBegin
 		mov dx, WORD PTR lpGDIInfo+2
 		mov WORD PTR npdisp_request.npdr_re_lpGDIInfoAddr, ax
 		mov WORD PTR npdisp_request.npdr_re_lpGDIInfoAddr+2, dx
-        mov dx, 07e8h
-    	mov ax, OFFSET npdisp_request
-    	out dx, al
-    	mov al, ah
-    	out dx, al
-    	mov ax, SEG npdisp_request
-    	out dx, al
-    	mov al, ah
-    	out dx, al
-        mov dx, 07e9h
-        mov al, 'N'
-        out dx, al
-        mov al, 'P'
-        out dx, al
-        mov al, '2'
-        out dx, al
-        mov al, '1'
-        out dx, al
-        LeaveCrit
-    	pop dx
-    	pop ax
+		mov dx, 07e8h
+		mov ax, OFFSET npdisp_request
+		out dx, al
+		mov al, ah
+		out dx, al
+		mov ax, SEG npdisp_request
+		out dx, al
+		mov al, ah
+		out dx, al
+		mov dx, 07e9h
+		mov al, 'N'
+		out dx, al
+		mov al, 'P'
+		out dx, al
+		mov al, '2'
+		out dx, al
+		mov al, '1'
+		out dx, al
+		LeaveCrit
 
-		mov ax, WORD PTR npdisp_retValue
-		
+		mov si, WORD PTR npdisp_retValue
+		or  si, si
+		jz  .reenable_done
+
+		; DirectDraw使用中は更新したDDHALINFOをbReset=TRUEで再登録する。
+		mov ax, WORD PTR npdisp_ddSetInfo
+		mov dx, WORD PTR npdisp_ddSetInfo+2
+		or  ax, dx
+		jz  .reenable_done
+
+		mov cx, 1
+		push ds
+		push ds
+		push OFFSET npdisp_ddHalInfo
+		push cx
+		call DWORD PTR npdisp_ddSetInfo
+		pop ds
+
+		mov si, ax
+
+.reenable_done:
+		mov ax, si
+		pop ds
+
 cEnd	ReEnable
 
 cProc   GetDriverResourceID,<FAR,PUBLIC,WIN,PASCAL>
