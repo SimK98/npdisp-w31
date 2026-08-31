@@ -1,23 +1,23 @@
 
 1 VERSIONINFO 
-FILEVERSION    0,15,0,0
-PRODUCTVERSION 0,15,0,0
+FILEVERSION    0,16,0,0
+PRODUCTVERSION 0,16,0,0
 FILEFLAGSMASK  0
 FILEFLAGS      0
-FILEOS         0x00010001L
-FILETYPE       0x00000003L
-FILESUBTYPE    0x00000004L
+FILEOS         0x00000004L
+FILETYPE       0x00000002L
+FILESUBTYPE    0x00000000L
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
         BLOCK "041103A4"   /* LangID = Japanese, CodePage = 932 */
         BEGIN 
             VALUE "CompanyName",     "Neko Project II", "\0"
-            VALUE "FileDescription", "Neko Project II Display Driver", "\0"
+            VALUE "FileDescription", "Neko Project II DirectDraw HAL Bridge", "\0"
             VALUE "FileVersion",     "0.16.0.0", "\0"
-            VALUE "InternalName",    "DISPLAY", "\0"
+            VALUE "InternalName",    "NPDISPDD", "\0"
             VALUE "LegalCopyright",  "ÇÀÇ±Ç≥ÇÒäJî≠ÇøÅ[Çﬁ", "\0"
-            VALUE "OriginalFilename","npdisp.drv", "\0"
+            VALUE "OriginalFilename","NPDISPDD.DLL", "\0"
             VALUE "ProductName",     "Neko Project II Display Driver", "\0"
             VALUE "ProductVersion",  "0.16.0.0", "\0"
         END 
