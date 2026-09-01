@@ -89,6 +89,21 @@ typedef int BOOL;
 #define NPDISP_EXEC_COMMAND                      0x46
 #define NPDISP_FUNCORDER_DD32_DISPATCH           0xfe30UL
 
+#define NPDISP_DDHAL_DRIVER_NOTHANDLED            0x00000000UL
+#define NPDISP_DDHAL_DRIVER_HANDLED               0x00000001UL
+#define NPDISP_DDWAITVB_BLOCKBEGIN                0x00000001UL
+#define NPDISP_DDWAITVB_BLOCKEND                  0x00000004UL
+#define NPDISP_DDWAITVB_I_TESTVB                  0x80000006UL
+
+typedef struct {
+    DWORD lpDD;
+    DWORD dwFlags;
+    DWORD bIsInVB;
+    DWORD hEvent;
+    DWORD ddRVal;
+    DWORD WaitForVerticalBlank;
+} NPDISP_DDHAL_WAITVBDATA32;
+
 /* 固定2DブリッジではEDIにコールバックIDを渡す。 */
 #define NPDISP_DDBRIDGE_CB_DD_CREATESURFACE      0x0001UL
 #define NPDISP_DDBRIDGE_CB_DD_SETCOLORKEY        0x0002UL
@@ -159,7 +174,80 @@ static DWORD npdispdd_host_call(DWORD callbackId, void *lpData)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_CreateSurface,       NPDISP_DDBRIDGE_CB_DD_CREATESURFACE)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_DriverSetColorKey,   NPDISP_DDBRIDGE_CB_DD_SETCOLORKEY)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_SetMode,             NPDISP_DDBRIDGE_CB_DD_SETMODE)
-NPDISP_DDBRIDGE_WRAPPER(npdispdd_WaitForVerticalBlank,NPDISP_DDBRIDGE_CB_DD_WAITVB)
+/*
+ * Blocking vertical-blank waits are implemented here rather than in one host
+ * callback. Every TESTVB transaction returns to guest execution, allowing the
+ * emulator's normal event scheduler to advance the raster state.
+ */
+static DWORD npdispdd_test_vblank(NPDISP_DDHAL_WAITVBDATA32 *data, DWORD *inVBlank)
+{
+    DWORD result;
+
+    data->dwFlags = NPDISP_DDWAITVB_I_TESTVB;
+    result = npdispdd_host_call(NPDISP_DDBRIDGE_CB_DD_WAITVB, data);
+    if (result == NPDISP_DDHAL_DRIVER_HANDLED) {
+        *inVBlank = data->bIsInVB ? 1UL : 0UL;
+    }
+    return result;
+}
+
+static DWORD WINAPI npdispdd_WaitForVerticalBlank(void *lpData)
+{
+    NPDISP_DDHAL_WAITVBDATA32 *data;
+    DWORD originalFlags;
+    DWORD inVBlank;
+    DWORD result;
+
+    if (!lpData) return NPDISP_DDHAL_DRIVER_NOTHANDLED;
+    data = (NPDISP_DDHAL_WAITVBDATA32 *)lpData;
+    originalFlags = data->dwFlags;
+
+    if (originalFlags == NPDISP_DDWAITVB_I_TESTVB) {
+        return npdispdd_host_call(NPDISP_DDBRIDGE_CB_DD_WAITVB, data);
+    }
+    if (originalFlags != NPDISP_DDWAITVB_BLOCKBEGIN &&
+        originalFlags != NPDISP_DDWAITVB_BLOCKEND) {
+        return npdispdd_host_call(NPDISP_DDBRIDGE_CB_DD_WAITVB, data);
+    }
+
+    result = npdispdd_test_vblank(data, &inVBlank);
+    if (result != NPDISP_DDHAL_DRIVER_HANDLED) {
+        data->dwFlags = originalFlags;
+        return result;
+    }
+
+    if (originalFlags == NPDISP_DDWAITVB_BLOCKBEGIN) {
+        /* A call made during VBlank waits for the following VBlank begin. */
+        while (inVBlank) {
+            result = npdispdd_test_vblank(data, &inVBlank);
+            if (result != NPDISP_DDHAL_DRIVER_HANDLED) {
+                data->dwFlags = originalFlags;
+                return result;
+            }
+        }
+        while (!inVBlank) {
+            result = npdispdd_test_vblank(data, &inVBlank);
+            if (result != NPDISP_DDHAL_DRIVER_HANDLED) {
+                data->dwFlags = originalFlags;
+                return result;
+            }
+        }
+    }
+    else {
+        /* Outside VBlank, BLOCKEND is already satisfied. */
+        while (inVBlank) {
+            result = npdispdd_test_vblank(data, &inVBlank);
+            if (result != NPDISP_DDHAL_DRIVER_HANDLED) {
+                data->dwFlags = originalFlags;
+                return result;
+            }
+        }
+    }
+
+    data->dwFlags = originalFlags;
+    data->ddRVal = 0;
+    return NPDISP_DDHAL_DRIVER_HANDLED;
+}
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_CanCreateSurface,    NPDISP_DDBRIDGE_CB_DD_CANCREATESURFACE)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_CreatePalette,       NPDISP_DDBRIDGE_CB_DD_CREATEPALETTE)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_GetScanLine,         NPDISP_DDBRIDGE_CB_DD_GETSCANLINE)
