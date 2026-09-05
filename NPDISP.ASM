@@ -38,6 +38,9 @@ npdisp_ddHalInfo	db	460	DUP(0)
 ; EnumDisplayModes用のモード表。最大128個を確保し、np21/wが内容と現在モードを設定する。
 PUBLIC npdisp_ddModeInfo
 npdisp_ddModeInfo	db	(36 * 128)	DUP(0)
+; DirectDraw FourCC code list. Protocol v14 keeps this immediately after the fixed mode table.
+PUBLIC npdisp_ddFourCC
+npdisp_ddFourCC	dd	0
 ; DirectDrawの固定オフスクリーン領域を示すビデオメモリヒープ情報。
 PUBLIC npdisp_ddVidMem
 npdisp_ddVidMem	db	24	DUP(0)
