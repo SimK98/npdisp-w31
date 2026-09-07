@@ -44,6 +44,13 @@ npdisp_ddFourCC	dd	0
 ; DirectDrawの固定オフスクリーン領域を示すビデオメモリヒープ情報。
 PUBLIC npdisp_ddVidMem
 npdisp_ddVidMem	db	24	DUP(0)
+; protocol v15以降のDD32 bridge descriptor。DDHALINFOのD3D fieldをscratchに使用しない。
+PUBLIC npdisp_ddBridgeInfo
+npdisp_ddBridgeInfo	db	80	DUP(0)
+PUBLIC npdisp_d3dGlobalDriverData
+npdisp_d3dGlobalDriverData	db	192	DUP(0)
+PUBLIC npdisp_d3dHalCallbacks
+npdisp_d3dHalCallbacks	db	140	DUP(0)
 PUBLIC npdisp_ddSetInfo
 npdisp_ddSetInfo	dd	0
 PUBLIC npdisp_ddHInstance
@@ -113,6 +120,9 @@ npdr_init_ddHalInfoAddr			dd	? ; NPDISP_VERSION = 7 or later
 npdr_init_ddModeInfoAddr		dd	? ; NPDISP_VERSION = 9 or later
 npdr_init_ddPaletteCallbacksAddr	dd	? ; NPDISP_VERSION = 10 or later
 npdr_init_ddVidMemAddr			dd	? ; NPDISP_VERSION = 12 or later
+npdr_init_ddBridgeInfoAddr		dd	? ; NPDISP_VERSION = 15 or later
+npdr_init_d3dGlobalDriverDataAddr	dd	? ; NPDISP_VERSION = 15 or later
+npdr_init_d3dHalCallbacksAddr		dd	? ; NPDISP_VERSION = 15 or later
 NPDISP_REQUEST_Init ends
 
 ; for Win9x
@@ -534,6 +544,12 @@ SendNPDispInitialize proc far
     mov WORD PTR npdisp_request.npdr_init_ddPaletteCallbacksAddr+2, SEG npdisp_ddPaletteCallbacks
     mov WORD PTR npdisp_request.npdr_init_ddVidMemAddr, OFFSET npdisp_ddVidMem
     mov WORD PTR npdisp_request.npdr_init_ddVidMemAddr+2, SEG npdisp_ddVidMem
+    mov WORD PTR npdisp_request.npdr_init_ddBridgeInfoAddr, OFFSET npdisp_ddBridgeInfo
+    mov WORD PTR npdisp_request.npdr_init_ddBridgeInfoAddr+2, SEG npdisp_ddBridgeInfo
+    mov WORD PTR npdisp_request.npdr_init_d3dGlobalDriverDataAddr, OFFSET npdisp_d3dGlobalDriverData
+    mov WORD PTR npdisp_request.npdr_init_d3dGlobalDriverDataAddr+2, SEG npdisp_d3dGlobalDriverData
+    mov WORD PTR npdisp_request.npdr_init_d3dHalCallbacksAddr, OFFSET npdisp_d3dHalCallbacks
+    mov WORD PTR npdisp_request.npdr_init_d3dHalCallbacksAddr+2, SEG npdisp_d3dHalCallbacks
 
     mov dx, 07e8h
 	mov ax, OFFSET npdisp_request
