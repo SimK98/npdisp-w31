@@ -193,6 +193,26 @@ typedef struct {
 
 typedef struct {
     DWORD dwSize;
+    DWORD dwFlags;
+    DWORD dwFourCC;
+    DWORD dwZBufferBitDepth;
+    DWORD dwStencilBitDepth;
+    DWORD dwZBitMask;
+    DWORD dwStencilBitMask;
+    DWORD dwRGBZBitMask;
+} NPDISP_DDPIXELFORMAT32;
+
+typedef char NPDISP_DDPIXELFORMAT32_SIZE_CHECK[(sizeof(NPDISP_DDPIXELFORMAT32) == 32) ? 1 : -1];
+
+typedef struct {
+    DWORD dwCount;
+    NPDISP_DDPIXELFORMAT32 formats[1];
+} NPDISP_DDZPIXELFORMATS32;
+
+typedef char NPDISP_DDZPIXELFORMATS32_SIZE_CHECK[(sizeof(NPDISP_DDZPIXELFORMATS32) == 36) ? 1 : -1];
+
+typedef struct {
+    DWORD dwSize;
     DWORD ContextCreate;
     DWORD ContextDestroy;
     DWORD ContextDestroyAll;
@@ -397,6 +417,7 @@ typedef char NPDISP_DD_GETDRIVERINFODATA32_SIZE_CHECK[(sizeof(NPDISP_DD_GETDRIVE
 #define NPDISP_DDBRIDGE_CB_D3D_RENDERSTATE         0x0303UL
 #define NPDISP_DDBRIDGE_CB_D3D_RENDERPRIMITIVE     0x0304UL
 #define NPDISP_DDBRIDGE_CB_D3D_GETSTATE            0x0305UL
+#define NPDISP_DDBRIDGE_CB_D3D_SCENECAPTURE        0x0306UL
 #define NPDISP_DDBRIDGE_CB_D3D_DESTROYDDLOCAL      0x0311UL
 #define NPDISP_DDBRIDGE_CB_D3D_SETRENDERTARGET     0x0320UL
 #define NPDISP_DDBRIDGE_CB_D3D_CLEAR               0x0321UL
@@ -414,7 +435,10 @@ typedef char NPDISP_DD_GETDRIVERINFODATA32_SIZE_CHECK[(sizeof(NPDISP_DD_GETDRIVE
 #define NPDISP_D3DDD_LINECAPS                       0x00000020UL
 #define NPDISP_D3DDD_TRICAPS                        0x00000040UL
 #define NPDISP_D3DDD_DEVICERENDERBITDEPTH           0x00000080UL
+#define NPDISP_D3DDD_DEVICEZBUFFERBITDEPTH           0x00000100UL
 #define NPDISP_D3DDD_MAXVERTEXCOUNT                  0x00000400UL
+#define NPDISP_D3DPRASTERCAPS_ZTEST                  0x00000010UL
+#define NPDISP_D3DPCMPCAPS_ALL                       0x000000ffUL
 #define NPDISP_D3DDEVCAPS_FLOATTLVERTEX             0x00000001UL
 #define NPDISP_D3DDEVCAPS_EXECUTESYSTEMMEMORY       0x00000010UL
 #define NPDISP_D3DDEVCAPS_TLVERTEXSYSTEMMEMORY      0x00000040UL
@@ -580,6 +604,7 @@ static DWORD WINAPI npdispdd_D3DValidateTextureStageState(void *lpData)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DContextCreate,     NPDISP_DDBRIDGE_CB_D3D_CONTEXTCREATE)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DContextDestroy,    NPDISP_DDBRIDGE_CB_D3D_CONTEXTDESTROY)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DContextDestroyAll, NPDISP_DDBRIDGE_CB_D3D_CONTEXTDESTROYALL)
+NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DSceneCapture,      NPDISP_DDBRIDGE_CB_D3D_SCENECAPTURE)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DRenderState,       NPDISP_DDBRIDGE_CB_D3D_RENDERSTATE)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DRenderPrimitive,   NPDISP_DDBRIDGE_CB_D3D_RENDERPRIMITIVE)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DGetState,          NPDISP_DDBRIDGE_CB_D3D_GETSTATE)
@@ -614,6 +639,7 @@ static NPDISP_D3DHAL_CALLBACKS32 *npdispdd_d3dCallbacks;
 static NPDISP_D3DHAL_CALLBACKS2_32 npdispdd_d3dCallbacks2 = { sizeof(NPDISP_D3DHAL_CALLBACKS2_32) };
 static NPDISP_D3DHAL_CALLBACKS3_32 npdispdd_d3dCallbacks3 = { sizeof(NPDISP_D3DHAL_CALLBACKS3_32) };
 static NPDISP_D3DHAL_D3DEXTENDEDCAPS32 npdispdd_d3dExtendedCaps = { sizeof(NPDISP_D3DHAL_D3DEXTENDEDCAPS32) };
+static NPDISP_DDZPIXELFORMATS32 npdispdd_zPixelFormats;
 static NPDISP_DD_MISCELLANEOUS2CALLBACKS32 npdispdd_misc2Callbacks = { sizeof(NPDISP_DD_MISCELLANEOUS2CALLBACKS32) };
 static BOOL npdispdd_d3dEnabled;
 static DWORD npdispdd_d3dParseUnknownCommand;
@@ -673,6 +699,7 @@ static DWORD WINAPI npdispdd_GetDriverInfo(void *lpData)
     static const NPDISP_GUID32 parseUnknownCommandGuid = { 0x2e04ffa0UL, 0x98e4, 0x11d1, { 0x8c, 0xe1, 0x00, 0xa0, 0xc9, 0x06, 0x29, 0xa8 } };
     static const NPDISP_GUID32 extendedCapsGuid = { 0x7de41f80UL, 0x9d93, 0x11d0, { 0x89, 0xab, 0x00, 0xa0, 0xc9, 0x05, 0x41, 0x29 } };
     static const NPDISP_GUID32 misc2Guid = { 0x406b2f00UL, 0x3e5a, 0x11d1, { 0xb6, 0x40, 0x00, 0xaa, 0x00, 0xa1, 0xf9, 0x6a } };
+    static const NPDISP_GUID32 zPixelFormatsGuid = { 0x93869880UL, 0x36cf, 0x11d1, { 0x9b, 0x1b, 0x00, 0xaa, 0x00, 0xbb, 0xb8, 0xae } };
     NPDISP_DD_GETDRIVERINFODATA32 *data = (NPDISP_DD_GETDRIVERINFODATA32 *)lpData;
     const void *source;
     DWORD sourceSize;
@@ -707,6 +734,10 @@ static DWORD WINAPI npdispdd_GetDriverInfo(void *lpData)
         source = &npdispdd_d3dExtendedCaps;
         sourceSize = sizeof(npdispdd_d3dExtendedCaps);
     }
+    else if (npdispdd_guid_equal(&data->guidInfo, &zPixelFormatsGuid)) {
+        source = &npdispdd_zPixelFormats;
+        sourceSize = sizeof(npdispdd_zPixelFormats);
+    }
     else if (npdispdd_guid_equal(&data->guidInfo, &misc2Guid)) {
         source = &npdispdd_misc2Callbacks;
         sourceSize = sizeof(npdispdd_misc2Callbacks);
@@ -740,7 +771,8 @@ static void npdispdd_initD3D(void)
     npdispdd_d3dGlobal->hwCaps.dwSize = sizeof(npdispdd_d3dGlobal->hwCaps);
     npdispdd_d3dGlobal->hwCaps.dwFlags = NPDISP_D3DDD_COLORMODEL | NPDISP_D3DDD_DEVCAPS |
         NPDISP_D3DDD_TRANSFORMCAPS | NPDISP_D3DDD_LIGHTINGCAPS | NPDISP_D3DDD_BCLIPPING |
-        NPDISP_D3DDD_TRICAPS | NPDISP_D3DDD_DEVICERENDERBITDEPTH | NPDISP_D3DDD_MAXVERTEXCOUNT;
+        NPDISP_D3DDD_LINECAPS | NPDISP_D3DDD_TRICAPS | NPDISP_D3DDD_DEVICERENDERBITDEPTH | NPDISP_D3DDD_DEVICEZBUFFERBITDEPTH |
+        NPDISP_D3DDD_MAXVERTEXCOUNT;
     npdispdd_d3dGlobal->hwCaps.dcmColorModel = NPDISP_D3DCOLOR_RGB;
     npdispdd_d3dGlobal->hwCaps.dwDevCaps = NPDISP_D3DDEVCAPS_FLOATTLVERTEX |
         NPDISP_D3DDEVCAPS_EXECUTESYSTEMMEMORY | NPDISP_D3DDEVCAPS_TLVERTEXSYSTEMMEMORY |
@@ -750,11 +782,16 @@ static void npdispdd_initD3D(void)
     npdispdd_d3dGlobal->hwCaps.bClipping = 0;
     npdispdd_d3dGlobal->hwCaps.dlcLightingCaps.dwSize = sizeof(npdispdd_d3dGlobal->hwCaps.dlcLightingCaps);
     npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwSize = sizeof(npdispdd_d3dGlobal->hwCaps.dpcLineCaps);
+    npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwRasterCaps = NPDISP_D3DPRASTERCAPS_ZTEST;
+    npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwZCmpCaps = NPDISP_D3DPCMPCAPS_ALL;
+    npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwShadeCaps = NPDISP_D3DPSHADECAPS_COLORFLATRGB | NPDISP_D3DPSHADECAPS_COLORGOURAUDRGB;
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwSize = sizeof(npdispdd_d3dGlobal->hwCaps.dpcTriCaps);
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwMiscCaps = NPDISP_D3DPMISCCAPS_CULLNONE | NPDISP_D3DPMISCCAPS_CULLCW | NPDISP_D3DPMISCCAPS_CULLCCW;
+    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwRasterCaps = NPDISP_D3DPRASTERCAPS_ZTEST;
+    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwZCmpCaps = NPDISP_D3DPCMPCAPS_ALL;
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwShadeCaps = NPDISP_D3DPSHADECAPS_COLORFLATRGB | NPDISP_D3DPSHADECAPS_COLORGOURAUDRGB;
     npdispdd_d3dGlobal->hwCaps.dwDeviceRenderBitDepth = NPDISP_DDBD_16 | NPDISP_DDBD_24 | NPDISP_DDBD_32;
-    npdispdd_d3dGlobal->hwCaps.dwDeviceZBufferBitDepth = 0;
+    npdispdd_d3dGlobal->hwCaps.dwDeviceZBufferBitDepth = NPDISP_DDBD_16;
     npdispdd_d3dGlobal->hwCaps.dwMaxBufferSize = 0;
     npdispdd_d3dGlobal->hwCaps.dwMaxVertexCount = 65536UL;
     npdispdd_d3dGlobal->dwNumVertices = 0;
@@ -766,6 +803,7 @@ static void npdispdd_initD3D(void)
     npdispdd_d3dCallbacks->ContextCreate = (DWORD)npdispdd_D3DContextCreate;
     npdispdd_d3dCallbacks->ContextDestroy = (DWORD)npdispdd_D3DContextDestroy;
     npdispdd_d3dCallbacks->ContextDestroyAll = (DWORD)npdispdd_D3DContextDestroyAll;
+    npdispdd_d3dCallbacks->SceneCapture = (DWORD)npdispdd_D3DSceneCapture;
     npdispdd_d3dCallbacks->RenderState = (DWORD)npdispdd_D3DRenderState;
     npdispdd_d3dCallbacks->RenderPrimitive = (DWORD)npdispdd_D3DRenderPrimitive;
     npdispdd_d3dCallbacks->GetState = (DWORD)npdispdd_D3DGetState;
@@ -787,6 +825,13 @@ static void npdispdd_initD3D(void)
     npdispdd_d3dCallbacks3.DrawPrimitives2 = (DWORD)npdispdd_D3DDrawPrimitives2;
 
     npdispdd_d3dParseUnknownCommand = 0;
+
+    npdispdd_zero_bytes(&npdispdd_zPixelFormats, sizeof(npdispdd_zPixelFormats));
+    npdispdd_zPixelFormats.dwCount = 1;
+    npdispdd_zPixelFormats.formats[0].dwSize = sizeof(npdispdd_zPixelFormats.formats[0]);
+    npdispdd_zPixelFormats.formats[0].dwFlags = 0x00000400UL;
+    npdispdd_zPixelFormats.formats[0].dwZBufferBitDepth = 16UL;
+    npdispdd_zPixelFormats.formats[0].dwZBitMask = 0x0000ffffUL;
 
     npdispdd_zero_bytes(&npdispdd_d3dExtendedCaps, sizeof(npdispdd_d3dExtendedCaps));
     npdispdd_d3dExtendedCaps.dwSize = sizeof(npdispdd_d3dExtendedCaps);
