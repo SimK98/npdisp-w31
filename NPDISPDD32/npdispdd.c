@@ -101,6 +101,9 @@ typedef int BOOL;
 #define NPDISP_DDWAITVB_BLOCKEND                  0x00000004UL
 #define NPDISP_DDWAITVB_I_TESTVB                  0x80000006UL
 
+#define NPDISP_DDSCAPS2_CUBEMAP                   0x00000200UL
+#define NPDISP_DDSCAPS2_CUBEMAP_ALLFACES          0x0000fc00UL
+
 typedef struct {
     DWORD lpDD;
     DWORD dwFlags;
@@ -210,6 +213,62 @@ typedef struct {
 } NPDISP_DDZPIXELFORMATS32;
 
 typedef char NPDISP_DDZPIXELFORMATS32_SIZE_CHECK[(sizeof(NPDISP_DDZPIXELFORMATS32) == 36) ? 1 : -1];
+
+typedef struct {
+    DWORD dwSize;
+    DWORD dwFlags;
+    DWORD dwFourCC;
+    DWORD dwRGBBitCount;
+    DWORD dwRBitMask;
+    DWORD dwGBitMask;
+    DWORD dwBBitMask;
+    DWORD dwRGBAlphaBitMask;
+} NPDISP_DDPIXELFORMAT_TEXTURE32;
+
+typedef struct {
+    DWORD dwCaps;
+} NPDISP_DDSCAPS32;
+
+typedef struct {
+    DWORD dwCaps2;
+    DWORD dwCaps3;
+    DWORD dwCaps4;
+} NPDISP_DDSCAPSEX32;
+
+typedef struct {
+    NPDISP_DDSCAPSEX32 ddsCapsEx;
+    NPDISP_DDSCAPSEX32 ddsCapsExAlt;
+} NPDISP_DD_EXTENDEDHEAPRESTRICTIONS32;
+
+typedef struct {
+    DWORD dwSize;
+    NPDISP_DDSCAPSEX32 ddsCapsMore;
+    NPDISP_DD_EXTENDEDHEAPRESTRICTIONS32 ddsExtendedHeapRestrictions[1];
+} NPDISP_DD_MORESURFACECAPS32;
+
+typedef char NPDISP_DD_MORESURFACECAPS32_SIZE_CHECK[(sizeof(NPDISP_DD_MORESURFACECAPS32) == 40) ? 1 : -1];
+
+typedef struct {
+    DWORD dwSize;
+    DWORD dwFlags;
+    DWORD dwHeight;
+    DWORD dwWidth;
+    DWORD lPitch;
+    DWORD dwBackBufferCount;
+    DWORD dwMipMapCount;
+    DWORD dwAlphaBitDepth;
+    DWORD dwReserved;
+    DWORD lpSurface;
+    DWORD ddckCKDestOverlay[2];
+    DWORD ddckCKDestBlt[2];
+    DWORD ddckCKSrcOverlay[2];
+    DWORD ddckCKSrcBlt[2];
+    NPDISP_DDPIXELFORMAT_TEXTURE32 ddpfPixelFormat;
+    NPDISP_DDSCAPS32 ddsCaps;
+} NPDISP_DDSURFACEDESC32;
+
+typedef char NPDISP_DDPIXELFORMAT_TEXTURE32_SIZE_CHECK[(sizeof(NPDISP_DDPIXELFORMAT_TEXTURE32) == 32) ? 1 : -1];
+typedef char NPDISP_DDSURFACEDESC32_SIZE_CHECK[(sizeof(NPDISP_DDSURFACEDESC32) == 108) ? 1 : -1];
 
 typedef struct {
     DWORD dwSize;
@@ -425,6 +484,7 @@ typedef char NPDISP_DD_GETDRIVERINFODATA32_SIZE_CHECK[(sizeof(NPDISP_DD_GETDRIVE
 #define NPDISP_DDBRIDGE_CB_D3D_DRAWONEINDEXEDPRIMITIVE 0x0323UL
 #define NPDISP_DDBRIDGE_CB_D3D_DRAWPRIMITIVES      0x0324UL
 #define NPDISP_DDBRIDGE_CB_D3D_DRAWPRIMITIVES2     0x0330UL
+#define NPDISP_DDBRIDGE_CB_D3D_VALIDATESTAGE        0x0331UL
 #define NPDISP_DDBRIDGE_CB_D3D_CREATESURFACEEX     0x0310UL
 
 #define NPDISP_D3DDD_COLORMODEL                     0x00000001UL
@@ -439,9 +499,22 @@ typedef char NPDISP_DD_GETDRIVERINFODATA32_SIZE_CHECK[(sizeof(NPDISP_DD_GETDRIVE
 #define NPDISP_D3DDD_MAXVERTEXCOUNT                  0x00000400UL
 #define NPDISP_D3DPRASTERCAPS_ZTEST                  0x00000010UL
 #define NPDISP_D3DPCMPCAPS_ALL                       0x000000ffUL
+#define NPDISP_D3DPBLENDCAPS_ZERO                    0x00000001UL
+#define NPDISP_D3DPBLENDCAPS_ONE                     0x00000002UL
+#define NPDISP_D3DPBLENDCAPS_SRCCOLOR                0x00000004UL
+#define NPDISP_D3DPBLENDCAPS_INVSRCCOLOR             0x00000008UL
+#define NPDISP_D3DPBLENDCAPS_SRCALPHA                0x00000010UL
+#define NPDISP_D3DPBLENDCAPS_INVSRCALPHA             0x00000020UL
+#define NPDISP_D3DPBLENDCAPS_DESTALPHA               0x00000040UL
+#define NPDISP_D3DPBLENDCAPS_INVDESTALPHA            0x00000080UL
+#define NPDISP_D3DPBLENDCAPS_DESTCOLOR               0x00000100UL
+#define NPDISP_D3DPBLENDCAPS_INVDESTCOLOR            0x00000200UL
+#define NPDISP_D3DPBLENDCAPS_SRCALPHASAT             0x00000400UL
 #define NPDISP_D3DDEVCAPS_FLOATTLVERTEX             0x00000001UL
 #define NPDISP_D3DDEVCAPS_EXECUTESYSTEMMEMORY       0x00000010UL
 #define NPDISP_D3DDEVCAPS_TLVERTEXSYSTEMMEMORY      0x00000040UL
+#define NPDISP_D3DDEVCAPS_TEXTURESYSTEMMEMORY       0x00000100UL
+#define NPDISP_D3DDEVCAPS_TEXTUREVIDEOMEMORY        0x00000200UL
 #define NPDISP_D3DDEVCAPS_DRAWPRIMTLVERTEX          0x00000400UL
 #define NPDISP_D3DDEVCAPS_DRAWPRIMITIVES2            0x00002000UL
 #define NPDISP_D3DDEVCAPS_DRAWPRIMITIVES2EX          0x00008000UL
@@ -452,6 +525,34 @@ typedef char NPDISP_DD_GETDRIVERINFODATA32_SIZE_CHECK[(sizeof(NPDISP_DD_GETDRIVE
 #define NPDISP_D3DPMISCCAPS_CULLCCW                  0x00000040UL
 #define NPDISP_D3DPSHADECAPS_COLORFLATRGB            0x00000002UL
 #define NPDISP_D3DPSHADECAPS_COLORGOURAUDRGB         0x00000008UL
+#define NPDISP_D3DPTEXTURECAPS_PERSPECTIVE           0x00000001UL
+#define NPDISP_D3DPTEXTURECAPS_ALPHA                 0x00000004UL
+#define NPDISP_D3DPTEXTURECAPS_CUBEMAP               0x00000800UL
+#define NPDISP_D3DPTEXTURECAPS_NOPROJECTEDBUMPENV    0x00200000UL
+#define NPDISP_D3DPTFILTERCAPS_LINEAR                 0x00000002UL
+#define NPDISP_D3DPTFILTERCAPS_MINFPOINT              0x00000100UL
+#define NPDISP_D3DPTFILTERCAPS_MINFLINEAR             0x00000200UL
+#define NPDISP_D3DPTFILTERCAPS_MAGFPOINT              0x01000000UL
+#define NPDISP_D3DPTFILTERCAPS_MAGFLINEAR             0x02000000UL
+#define NPDISP_D3DPTBLENDCAPS_MODULATE                0x00000002UL
+#define NPDISP_D3DPTADDRESSCAPS_WRAP                  0x00000001UL
+#define NPDISP_D3DPTADDRESSCAPS_MIRROR                0x00000002UL
+#define NPDISP_D3DPTADDRESSCAPS_CLAMP                 0x00000004UL
+#define NPDISP_D3DPTADDRESSCAPS_INDEPENDENTUV         0x00000010UL
+#define NPDISP_D3DTEXOPCAPS_DISABLE                   0x00000001UL
+#define NPDISP_D3DTEXOPCAPS_SELECTARG1                0x00000002UL
+#define NPDISP_D3DTEXOPCAPS_SELECTARG2                0x00000004UL
+#define NPDISP_D3DTEXOPCAPS_MODULATE                  0x00000008UL
+#define NPDISP_D3DTEXOPCAPS_ADD                       0x00000040UL
+#define NPDISP_D3DTEXOPCAPS_BUMPENVMAP                0x00200000UL
+#define NPDISP_D3DTEXOPCAPS_BUMPENVMAPLUMINANCE       0x00400000UL
+#define NPDISP_DDSD_CAPS                              0x00000001UL
+#define NPDISP_DDSD_PIXELFORMAT                       0x00001000UL
+#define NPDISP_DDPF_ALPHAPIXELS                       0x00000001UL
+#define NPDISP_DDPF_RGB                               0x00000040UL
+#define NPDISP_DDPF_BUMPLUMINANCE                     0x00040000UL
+#define NPDISP_DDPF_BUMPDUDV                          0x00080000UL
+#define NPDISP_DDSCAPS_TEXTURE                        0x00001000UL
 #define NPDISP_D3DHAL2_CB32_SETRENDERTARGET          0x00000001UL
 #define NPDISP_D3DHAL2_CB32_CLEAR                    0x00000002UL
 #define NPDISP_D3DHAL2_CB32_DRAWONEPRIMITIVE         0x00000004UL
@@ -476,6 +577,7 @@ typedef char NPDISP_DD_GETDRIVERINFODATA32_SIZE_CHECK[(sizeof(NPDISP_DD_GETDRIVE
  */
 #pragma data_seg(".npddshr")
 static DWORD npdispdd_hInstance = 0xFFFFFFFFUL;
+static NPDISP_DDSURFACEDESC32 npdispdd_textureFormats[5] = { { 0 }, { 0 }, { 0 }, { 0 }, { 0 } };
 #pragma data_seg()
 
 /*
@@ -590,17 +692,6 @@ NPDISP_DDBRIDGE_WRAPPER(npdispdd_CreatePalette,       NPDISP_DDBRIDGE_CB_DD_CREA
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_GetScanLine,         NPDISP_DDBRIDGE_CB_DD_GETSCANLINE)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_SetExclusiveMode,    NPDISP_DDBRIDGE_CB_DD_SETEXCLUSIVEMODE)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_FlipToGDISurface,    NPDISP_DDBRIDGE_CB_DD_FLIPTOGDI)
-static DWORD WINAPI npdispdd_D3DValidateTextureStageState(void *lpData)
-{
-    NPDISP_D3DHAL_VALIDATETEXTURESTAGESTATEDATA32 *data;
-
-    data = (NPDISP_D3DHAL_VALIDATETEXTURESTAGESTATEDATA32 *)lpData;
-    if (!data) return NPDISP_DDHAL_DRIVER_HANDLED;
-    data->dwNumPasses = 1;
-    data->ddrval = 0;
-    return NPDISP_DDHAL_DRIVER_HANDLED;
-}
-
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DContextCreate,     NPDISP_DDBRIDGE_CB_D3D_CONTEXTCREATE)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DContextDestroy,    NPDISP_DDBRIDGE_CB_D3D_CONTEXTDESTROY)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DContextDestroyAll, NPDISP_DDBRIDGE_CB_D3D_CONTEXTDESTROYALL)
@@ -614,6 +705,7 @@ NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DDrawOnePrimitive,  NPDISP_DDBRIDGE_CB_D3D_DR
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DDrawOneIndexedPrimitive, NPDISP_DDBRIDGE_CB_D3D_DRAWONEINDEXEDPRIMITIVE)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DDrawPrimitives,    NPDISP_DDBRIDGE_CB_D3D_DRAWPRIMITIVES)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DDrawPrimitives2,   NPDISP_DDBRIDGE_CB_D3D_DRAWPRIMITIVES2)
+NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DValidateTextureStageState, NPDISP_DDBRIDGE_CB_D3D_VALIDATESTAGE)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DCreateSurfaceEx,   NPDISP_DDBRIDGE_CB_D3D_CREATESURFACEEX)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_D3DDestroyDDLocal,    NPDISP_DDBRIDGE_CB_D3D_DESTROYDDLOCAL)
 
@@ -640,6 +732,7 @@ static NPDISP_D3DHAL_CALLBACKS2_32 npdispdd_d3dCallbacks2 = { sizeof(NPDISP_D3DH
 static NPDISP_D3DHAL_CALLBACKS3_32 npdispdd_d3dCallbacks3 = { sizeof(NPDISP_D3DHAL_CALLBACKS3_32) };
 static NPDISP_D3DHAL_D3DEXTENDEDCAPS32 npdispdd_d3dExtendedCaps = { sizeof(NPDISP_D3DHAL_D3DEXTENDEDCAPS32) };
 static NPDISP_DDZPIXELFORMATS32 npdispdd_zPixelFormats;
+static NPDISP_DD_MORESURFACECAPS32 npdispdd_moreSurfaceCaps = { sizeof(NPDISP_DD_MORESURFACECAPS32) };
 static NPDISP_DD_MISCELLANEOUS2CALLBACKS32 npdispdd_misc2Callbacks = { sizeof(NPDISP_DD_MISCELLANEOUS2CALLBACKS32) };
 static BOOL npdispdd_d3dEnabled;
 static DWORD npdispdd_d3dParseUnknownCommand;
@@ -700,6 +793,7 @@ static DWORD WINAPI npdispdd_GetDriverInfo(void *lpData)
     static const NPDISP_GUID32 extendedCapsGuid = { 0x7de41f80UL, 0x9d93, 0x11d0, { 0x89, 0xab, 0x00, 0xa0, 0xc9, 0x05, 0x41, 0x29 } };
     static const NPDISP_GUID32 misc2Guid = { 0x406b2f00UL, 0x3e5a, 0x11d1, { 0xb6, 0x40, 0x00, 0xaa, 0x00, 0xa1, 0xf9, 0x6a } };
     static const NPDISP_GUID32 zPixelFormatsGuid = { 0x93869880UL, 0x36cf, 0x11d1, { 0x9b, 0x1b, 0x00, 0xaa, 0x00, 0xbb, 0xb8, 0xae } };
+    static const NPDISP_GUID32 moreSurfaceCapsGuid = { 0x3b8a0466UL, 0xf269, 0x11d1, { 0x88, 0x0b, 0x00, 0xc0, 0x4f, 0xd9, 0x30, 0xc5 } };
     NPDISP_DD_GETDRIVERINFODATA32 *data = (NPDISP_DD_GETDRIVERINFODATA32 *)lpData;
     const void *source;
     DWORD sourceSize;
@@ -737,6 +831,10 @@ static DWORD WINAPI npdispdd_GetDriverInfo(void *lpData)
     else if (npdispdd_guid_equal(&data->guidInfo, &zPixelFormatsGuid)) {
         source = &npdispdd_zPixelFormats;
         sourceSize = sizeof(npdispdd_zPixelFormats);
+    }
+    else if (npdispdd_guid_equal(&data->guidInfo, &moreSurfaceCapsGuid)) {
+        source = &npdispdd_moreSurfaceCaps;
+        sourceSize = sizeof(npdispdd_moreSurfaceCaps);
     }
     else if (npdispdd_guid_equal(&data->guidInfo, &misc2Guid)) {
         source = &npdispdd_misc2Callbacks;
@@ -776,28 +874,93 @@ static void npdispdd_initD3D(void)
     npdispdd_d3dGlobal->hwCaps.dcmColorModel = NPDISP_D3DCOLOR_RGB;
     npdispdd_d3dGlobal->hwCaps.dwDevCaps = NPDISP_D3DDEVCAPS_FLOATTLVERTEX |
         NPDISP_D3DDEVCAPS_EXECUTESYSTEMMEMORY | NPDISP_D3DDEVCAPS_TLVERTEXSYSTEMMEMORY |
-        NPDISP_D3DDEVCAPS_DRAWPRIMTLVERTEX | NPDISP_D3DDEVCAPS_DRAWPRIMITIVES2 |
-        NPDISP_D3DDEVCAPS_DRAWPRIMITIVES2EX | NPDISP_D3DDEVCAPS_HWRASTERIZATION;
+        NPDISP_D3DDEVCAPS_TEXTUREVIDEOMEMORY | NPDISP_D3DDEVCAPS_DRAWPRIMTLVERTEX |
+        NPDISP_D3DDEVCAPS_DRAWPRIMITIVES2 | NPDISP_D3DDEVCAPS_DRAWPRIMITIVES2EX |
+        NPDISP_D3DDEVCAPS_HWRASTERIZATION;
     npdispdd_d3dGlobal->hwCaps.dtcTransformCaps.dwSize = sizeof(npdispdd_d3dGlobal->hwCaps.dtcTransformCaps);
     npdispdd_d3dGlobal->hwCaps.bClipping = 0;
     npdispdd_d3dGlobal->hwCaps.dlcLightingCaps.dwSize = sizeof(npdispdd_d3dGlobal->hwCaps.dlcLightingCaps);
     npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwSize = sizeof(npdispdd_d3dGlobal->hwCaps.dpcLineCaps);
     npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwRasterCaps = NPDISP_D3DPRASTERCAPS_ZTEST;
     npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwZCmpCaps = NPDISP_D3DPCMPCAPS_ALL;
+    npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwSrcBlendCaps = NPDISP_D3DPBLENDCAPS_ZERO | NPDISP_D3DPBLENDCAPS_ONE |
+        NPDISP_D3DPBLENDCAPS_SRCCOLOR | NPDISP_D3DPBLENDCAPS_INVSRCCOLOR | NPDISP_D3DPBLENDCAPS_SRCALPHA |
+        NPDISP_D3DPBLENDCAPS_INVSRCALPHA | NPDISP_D3DPBLENDCAPS_DESTCOLOR | NPDISP_D3DPBLENDCAPS_INVDESTCOLOR;
+    npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwDestBlendCaps = npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwSrcBlendCaps;
+    npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwAlphaCmpCaps = NPDISP_D3DPCMPCAPS_ALL;
     npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwShadeCaps = NPDISP_D3DPSHADECAPS_COLORFLATRGB | NPDISP_D3DPSHADECAPS_COLORGOURAUDRGB;
+    npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwTextureCaps = NPDISP_D3DPTEXTURECAPS_PERSPECTIVE | NPDISP_D3DPTEXTURECAPS_ALPHA | NPDISP_D3DPTEXTURECAPS_CUBEMAP | NPDISP_D3DPTEXTURECAPS_NOPROJECTEDBUMPENV;
+    npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwTextureFilterCaps = NPDISP_D3DPTFILTERCAPS_LINEAR |
+        NPDISP_D3DPTFILTERCAPS_MINFPOINT | NPDISP_D3DPTFILTERCAPS_MINFLINEAR |
+        NPDISP_D3DPTFILTERCAPS_MAGFPOINT | NPDISP_D3DPTFILTERCAPS_MAGFLINEAR;
+    npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwTextureBlendCaps = NPDISP_D3DPTBLENDCAPS_MODULATE;
+    npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwTextureAddressCaps = NPDISP_D3DPTADDRESSCAPS_WRAP | NPDISP_D3DPTADDRESSCAPS_MIRROR |
+        NPDISP_D3DPTADDRESSCAPS_CLAMP | NPDISP_D3DPTADDRESSCAPS_INDEPENDENTUV;
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwSize = sizeof(npdispdd_d3dGlobal->hwCaps.dpcTriCaps);
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwMiscCaps = NPDISP_D3DPMISCCAPS_CULLNONE | NPDISP_D3DPMISCCAPS_CULLCW | NPDISP_D3DPMISCCAPS_CULLCCW;
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwRasterCaps = NPDISP_D3DPRASTERCAPS_ZTEST;
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwZCmpCaps = NPDISP_D3DPCMPCAPS_ALL;
+    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwSrcBlendCaps = NPDISP_D3DPBLENDCAPS_ZERO | NPDISP_D3DPBLENDCAPS_ONE |
+        NPDISP_D3DPBLENDCAPS_SRCCOLOR | NPDISP_D3DPBLENDCAPS_INVSRCCOLOR | NPDISP_D3DPBLENDCAPS_SRCALPHA |
+        NPDISP_D3DPBLENDCAPS_INVSRCALPHA | NPDISP_D3DPBLENDCAPS_DESTCOLOR | NPDISP_D3DPBLENDCAPS_INVDESTCOLOR;
+    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwDestBlendCaps = npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwSrcBlendCaps;
+    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwAlphaCmpCaps = NPDISP_D3DPCMPCAPS_ALL;
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwShadeCaps = NPDISP_D3DPSHADECAPS_COLORFLATRGB | NPDISP_D3DPSHADECAPS_COLORGOURAUDRGB;
+    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwTextureCaps = NPDISP_D3DPTEXTURECAPS_PERSPECTIVE | NPDISP_D3DPTEXTURECAPS_ALPHA | NPDISP_D3DPTEXTURECAPS_CUBEMAP | NPDISP_D3DPTEXTURECAPS_NOPROJECTEDBUMPENV;
+    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwTextureFilterCaps = NPDISP_D3DPTFILTERCAPS_LINEAR |
+        NPDISP_D3DPTFILTERCAPS_MINFPOINT | NPDISP_D3DPTFILTERCAPS_MINFLINEAR |
+        NPDISP_D3DPTFILTERCAPS_MAGFPOINT | NPDISP_D3DPTFILTERCAPS_MAGFLINEAR;
+    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwTextureBlendCaps = NPDISP_D3DPTBLENDCAPS_MODULATE;
+    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwTextureAddressCaps = NPDISP_D3DPTADDRESSCAPS_WRAP | NPDISP_D3DPTADDRESSCAPS_MIRROR |
+        NPDISP_D3DPTADDRESSCAPS_CLAMP | NPDISP_D3DPTADDRESSCAPS_INDEPENDENTUV;
     npdispdd_d3dGlobal->hwCaps.dwDeviceRenderBitDepth = NPDISP_DDBD_16 | NPDISP_DDBD_24 | NPDISP_DDBD_32;
     npdispdd_d3dGlobal->hwCaps.dwDeviceZBufferBitDepth = NPDISP_DDBD_16;
     npdispdd_d3dGlobal->hwCaps.dwMaxBufferSize = 0;
     npdispdd_d3dGlobal->hwCaps.dwMaxVertexCount = 65536UL;
     npdispdd_d3dGlobal->dwNumVertices = 0;
     npdispdd_d3dGlobal->dwNumClipVertices = 20;
-    npdispdd_d3dGlobal->dwNumTextureFormats = 0;
-    npdispdd_d3dGlobal->lpTextureFormats = 0;
+    npdispdd_zero_bytes(&npdispdd_textureFormats, sizeof(npdispdd_textureFormats));
+    npdispdd_textureFormats[0].dwSize = sizeof(npdispdd_textureFormats[0]);
+    npdispdd_textureFormats[0].dwFlags = NPDISP_DDSD_PIXELFORMAT;
+    npdispdd_textureFormats[0].ddpfPixelFormat.dwSize = sizeof(npdispdd_textureFormats[0].ddpfPixelFormat);
+    npdispdd_textureFormats[0].ddpfPixelFormat.dwFlags = NPDISP_DDPF_RGB;
+    npdispdd_textureFormats[0].ddpfPixelFormat.dwRGBBitCount = 16;
+    npdispdd_textureFormats[0].ddpfPixelFormat.dwRBitMask = 0x0000f800UL;
+    npdispdd_textureFormats[0].ddpfPixelFormat.dwGBitMask = 0x000007e0UL;
+    npdispdd_textureFormats[0].ddpfPixelFormat.dwBBitMask = 0x0000001fUL;
+
+    npdispdd_textureFormats[1].dwSize = sizeof(npdispdd_textureFormats[1]);
+    npdispdd_textureFormats[1].dwFlags = NPDISP_DDSD_PIXELFORMAT;
+    npdispdd_textureFormats[1].ddpfPixelFormat.dwSize = sizeof(npdispdd_textureFormats[1].ddpfPixelFormat);
+    npdispdd_textureFormats[1].ddpfPixelFormat.dwFlags = NPDISP_DDPF_RGB | NPDISP_DDPF_ALPHAPIXELS;
+    npdispdd_textureFormats[1].ddpfPixelFormat.dwRGBBitCount = 16;
+    npdispdd_textureFormats[1].ddpfPixelFormat.dwRBitMask = 0x00007c00UL;
+    npdispdd_textureFormats[1].ddpfPixelFormat.dwGBitMask = 0x000003e0UL;
+    npdispdd_textureFormats[1].ddpfPixelFormat.dwBBitMask = 0x0000001fUL;
+    npdispdd_textureFormats[1].ddpfPixelFormat.dwRGBAlphaBitMask = 0x00008000UL;
+
+    npdispdd_textureFormats[2].dwSize = sizeof(npdispdd_textureFormats[2]);
+    npdispdd_textureFormats[2].dwFlags = NPDISP_DDSD_PIXELFORMAT;
+    npdispdd_textureFormats[2].ddpfPixelFormat.dwSize = sizeof(npdispdd_textureFormats[2].ddpfPixelFormat);
+    npdispdd_textureFormats[2].ddpfPixelFormat.dwFlags = NPDISP_DDPF_RGB | NPDISP_DDPF_ALPHAPIXELS;
+    npdispdd_textureFormats[2].ddpfPixelFormat.dwRGBBitCount = 16;
+    npdispdd_textureFormats[2].ddpfPixelFormat.dwRBitMask = 0x00000f00UL;
+    npdispdd_textureFormats[2].ddpfPixelFormat.dwGBitMask = 0x000000f0UL;
+    npdispdd_textureFormats[2].ddpfPixelFormat.dwBBitMask = 0x0000000fUL;
+    npdispdd_textureFormats[2].ddpfPixelFormat.dwRGBAlphaBitMask = 0x0000f000UL;
+
+
+    npdispdd_textureFormats[3].dwSize = sizeof(npdispdd_textureFormats[3]);
+    npdispdd_textureFormats[3].dwFlags = NPDISP_DDSD_PIXELFORMAT;
+    npdispdd_textureFormats[3].ddpfPixelFormat.dwSize = sizeof(npdispdd_textureFormats[3].ddpfPixelFormat);
+    npdispdd_textureFormats[3].ddpfPixelFormat.dwFlags = NPDISP_DDPF_BUMPDUDV | NPDISP_DDPF_BUMPLUMINANCE;
+    npdispdd_textureFormats[3].ddpfPixelFormat.dwRGBBitCount = 16;
+    npdispdd_textureFormats[3].ddpfPixelFormat.dwRBitMask = 0x0000001fUL;
+    npdispdd_textureFormats[3].ddpfPixelFormat.dwGBitMask = 0x000003e0UL;
+    npdispdd_textureFormats[3].ddpfPixelFormat.dwBBitMask = 0x0000fc00UL;
+
+    npdispdd_d3dGlobal->dwNumTextureFormats = 4;
+    npdispdd_d3dGlobal->lpTextureFormats = (DWORD)&npdispdd_textureFormats[0];
 
     npdispdd_d3dCallbacks->dwSize = sizeof(*npdispdd_d3dCallbacks);
     npdispdd_d3dCallbacks->ContextCreate = (DWORD)npdispdd_D3DContextCreate;
@@ -835,7 +998,23 @@ static void npdispdd_initD3D(void)
 
     npdispdd_zero_bytes(&npdispdd_d3dExtendedCaps, sizeof(npdispdd_d3dExtendedCaps));
     npdispdd_d3dExtendedCaps.dwSize = sizeof(npdispdd_d3dExtendedCaps);
+    npdispdd_d3dExtendedCaps.dwMinTextureWidth = 1;
+    npdispdd_d3dExtendedCaps.dwMaxTextureWidth = 1024;
+    npdispdd_d3dExtendedCaps.dwMinTextureHeight = 1;
+    npdispdd_d3dExtendedCaps.dwMaxTextureHeight = 1024;
+    npdispdd_d3dExtendedCaps.dwMaxTextureRepeat = 1024;
+    npdispdd_d3dExtendedCaps.dwMaxTextureAspectRatio = 1024;
     npdispdd_d3dExtendedCaps.dwMaxAnisotropy = 1;
+    npdispdd_d3dExtendedCaps.dwFVFCaps = 2;
+    npdispdd_d3dExtendedCaps.dwTextureOpCaps = NPDISP_D3DTEXOPCAPS_DISABLE |
+        NPDISP_D3DTEXOPCAPS_SELECTARG1 | NPDISP_D3DTEXOPCAPS_SELECTARG2 | NPDISP_D3DTEXOPCAPS_MODULATE |
+        NPDISP_D3DTEXOPCAPS_ADD | NPDISP_D3DTEXOPCAPS_BUMPENVMAP | NPDISP_D3DTEXOPCAPS_BUMPENVMAPLUMINANCE;
+    npdispdd_d3dExtendedCaps.wMaxTextureBlendStages = 3;
+    npdispdd_d3dExtendedCaps.wMaxSimultaneousTextures = 3;
+
+    npdispdd_zero_bytes(&npdispdd_moreSurfaceCaps, sizeof(npdispdd_moreSurfaceCaps));
+    npdispdd_moreSurfaceCaps.dwSize = sizeof(npdispdd_moreSurfaceCaps);
+    npdispdd_moreSurfaceCaps.ddsCapsMore.dwCaps2 = NPDISP_DDSCAPS2_CUBEMAP | NPDISP_DDSCAPS2_CUBEMAP_ALLFACES;
 
     npdispdd_zero_bytes(&npdispdd_misc2Callbacks, sizeof(npdispdd_misc2Callbacks));
     npdispdd_misc2Callbacks.dwSize = sizeof(npdispdd_misc2Callbacks);
