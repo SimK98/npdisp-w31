@@ -209,10 +209,10 @@ typedef char NPDISP_DDPIXELFORMAT32_SIZE_CHECK[(sizeof(NPDISP_DDPIXELFORMAT32) =
 
 typedef struct {
     DWORD dwCount;
-    NPDISP_DDPIXELFORMAT32 formats[1];
+    NPDISP_DDPIXELFORMAT32 formats[2];
 } NPDISP_DDZPIXELFORMATS32;
 
-typedef char NPDISP_DDZPIXELFORMATS32_SIZE_CHECK[(sizeof(NPDISP_DDZPIXELFORMATS32) == 36) ? 1 : -1];
+typedef char NPDISP_DDZPIXELFORMATS32_SIZE_CHECK[(sizeof(NPDISP_DDZPIXELFORMATS32) == 68) ? 1 : -1];
 
 typedef struct {
     DWORD dwSize;
@@ -498,6 +498,7 @@ typedef char NPDISP_DD_GETDRIVERINFODATA32_SIZE_CHECK[(sizeof(NPDISP_DD_GETDRIVE
 #define NPDISP_D3DDD_DEVICEZBUFFERBITDEPTH           0x00000100UL
 #define NPDISP_D3DDD_MAXVERTEXCOUNT                  0x00000400UL
 #define NPDISP_D3DPRASTERCAPS_ZTEST                  0x00000010UL
+#define NPDISP_D3DPRASTERCAPS_FOGVERTEX              0x00000080UL
 #define NPDISP_D3DPCMPCAPS_ALL                       0x000000ffUL
 #define NPDISP_D3DPBLENDCAPS_ZERO                    0x00000001UL
 #define NPDISP_D3DPBLENDCAPS_ONE                     0x00000002UL
@@ -525,13 +526,18 @@ typedef char NPDISP_DD_GETDRIVERINFODATA32_SIZE_CHECK[(sizeof(NPDISP_DD_GETDRIVE
 #define NPDISP_D3DPMISCCAPS_CULLCCW                  0x00000040UL
 #define NPDISP_D3DPSHADECAPS_COLORFLATRGB            0x00000002UL
 #define NPDISP_D3DPSHADECAPS_COLORGOURAUDRGB         0x00000008UL
+#define NPDISP_D3DPSHADECAPS_FOGGOURAUD               0x00080000UL
 #define NPDISP_D3DPTEXTURECAPS_PERSPECTIVE           0x00000001UL
 #define NPDISP_D3DPTEXTURECAPS_ALPHA                 0x00000004UL
 #define NPDISP_D3DPTEXTURECAPS_CUBEMAP               0x00000800UL
+#define NPDISP_D3DPTEXTURECAPS_MIPMAP                0x00004000UL
 #define NPDISP_D3DPTEXTURECAPS_NOPROJECTEDBUMPENV    0x00200000UL
 #define NPDISP_D3DPTFILTERCAPS_LINEAR                 0x00000002UL
+#define NPDISP_D3DPTFILTERCAPS_LINEARMIPLINEAR        0x00000020UL
 #define NPDISP_D3DPTFILTERCAPS_MINFPOINT              0x00000100UL
 #define NPDISP_D3DPTFILTERCAPS_MINFLINEAR             0x00000200UL
+#define NPDISP_D3DPTFILTERCAPS_MIPFPOINT               0x00010000UL
+#define NPDISP_D3DPTFILTERCAPS_MIPFLINEAR              0x00020000UL
 #define NPDISP_D3DPTFILTERCAPS_MAGFPOINT              0x01000000UL
 #define NPDISP_D3DPTFILTERCAPS_MAGFLINEAR             0x02000000UL
 #define NPDISP_D3DPTBLENDCAPS_MODULATE                0x00000002UL
@@ -539,6 +545,16 @@ typedef char NPDISP_DD_GETDRIVERINFODATA32_SIZE_CHECK[(sizeof(NPDISP_DD_GETDRIVE
 #define NPDISP_D3DPTADDRESSCAPS_MIRROR                0x00000002UL
 #define NPDISP_D3DPTADDRESSCAPS_CLAMP                 0x00000004UL
 #define NPDISP_D3DPTADDRESSCAPS_INDEPENDENTUV         0x00000010UL
+#define NPDISP_D3DSTENCILCAPS_KEEP                    0x00000001UL
+#define NPDISP_D3DSTENCILCAPS_ZERO                    0x00000002UL
+#define NPDISP_D3DSTENCILCAPS_REPLACE                 0x00000004UL
+#define NPDISP_D3DSTENCILCAPS_INCRSAT                 0x00000008UL
+#define NPDISP_D3DSTENCILCAPS_DECRSAT                 0x00000010UL
+#define NPDISP_D3DSTENCILCAPS_INVERT                  0x00000020UL
+#define NPDISP_D3DSTENCILCAPS_INCR                    0x00000040UL
+#define NPDISP_D3DSTENCILCAPS_DECR                    0x00000080UL
+#define NPDISP_D3DVTXPCAPS_DIRECTIONALLIGHTS          0x00000008UL
+#define NPDISP_D3DVTXPCAPS_POSITIONALLIGHTS           0x00000010UL
 #define NPDISP_D3DTEXOPCAPS_DISABLE                   0x00000001UL
 #define NPDISP_D3DTEXOPCAPS_SELECTARG1                0x00000002UL
 #define NPDISP_D3DTEXOPCAPS_SELECTARG2                0x00000004UL
@@ -881,14 +897,14 @@ static void npdispdd_initD3D(void)
     npdispdd_d3dGlobal->hwCaps.bClipping = 0;
     npdispdd_d3dGlobal->hwCaps.dlcLightingCaps.dwSize = sizeof(npdispdd_d3dGlobal->hwCaps.dlcLightingCaps);
     npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwSize = sizeof(npdispdd_d3dGlobal->hwCaps.dpcLineCaps);
-    npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwRasterCaps = NPDISP_D3DPRASTERCAPS_ZTEST;
+    npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwRasterCaps = NPDISP_D3DPRASTERCAPS_ZTEST | NPDISP_D3DPRASTERCAPS_FOGVERTEX;
     npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwZCmpCaps = NPDISP_D3DPCMPCAPS_ALL;
     npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwSrcBlendCaps = NPDISP_D3DPBLENDCAPS_ZERO | NPDISP_D3DPBLENDCAPS_ONE |
         NPDISP_D3DPBLENDCAPS_SRCCOLOR | NPDISP_D3DPBLENDCAPS_INVSRCCOLOR | NPDISP_D3DPBLENDCAPS_SRCALPHA |
         NPDISP_D3DPBLENDCAPS_INVSRCALPHA | NPDISP_D3DPBLENDCAPS_DESTCOLOR | NPDISP_D3DPBLENDCAPS_INVDESTCOLOR;
     npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwDestBlendCaps = npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwSrcBlendCaps;
     npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwAlphaCmpCaps = NPDISP_D3DPCMPCAPS_ALL;
-    npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwShadeCaps = NPDISP_D3DPSHADECAPS_COLORFLATRGB | NPDISP_D3DPSHADECAPS_COLORGOURAUDRGB;
+    npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwShadeCaps = NPDISP_D3DPSHADECAPS_COLORFLATRGB | NPDISP_D3DPSHADECAPS_COLORGOURAUDRGB | NPDISP_D3DPSHADECAPS_FOGGOURAUD;
     npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwTextureCaps = NPDISP_D3DPTEXTURECAPS_PERSPECTIVE | NPDISP_D3DPTEXTURECAPS_ALPHA | NPDISP_D3DPTEXTURECAPS_CUBEMAP | NPDISP_D3DPTEXTURECAPS_NOPROJECTEDBUMPENV;
     npdispdd_d3dGlobal->hwCaps.dpcLineCaps.dwTextureFilterCaps = NPDISP_D3DPTFILTERCAPS_LINEAR |
         NPDISP_D3DPTFILTERCAPS_MINFPOINT | NPDISP_D3DPTFILTERCAPS_MINFLINEAR |
@@ -898,17 +914,18 @@ static void npdispdd_initD3D(void)
         NPDISP_D3DPTADDRESSCAPS_CLAMP | NPDISP_D3DPTADDRESSCAPS_INDEPENDENTUV;
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwSize = sizeof(npdispdd_d3dGlobal->hwCaps.dpcTriCaps);
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwMiscCaps = NPDISP_D3DPMISCCAPS_CULLNONE | NPDISP_D3DPMISCCAPS_CULLCW | NPDISP_D3DPMISCCAPS_CULLCCW;
-    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwRasterCaps = NPDISP_D3DPRASTERCAPS_ZTEST;
+    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwRasterCaps = NPDISP_D3DPRASTERCAPS_ZTEST | NPDISP_D3DPRASTERCAPS_FOGVERTEX;
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwZCmpCaps = NPDISP_D3DPCMPCAPS_ALL;
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwSrcBlendCaps = NPDISP_D3DPBLENDCAPS_ZERO | NPDISP_D3DPBLENDCAPS_ONE |
         NPDISP_D3DPBLENDCAPS_SRCCOLOR | NPDISP_D3DPBLENDCAPS_INVSRCCOLOR | NPDISP_D3DPBLENDCAPS_SRCALPHA |
         NPDISP_D3DPBLENDCAPS_INVSRCALPHA | NPDISP_D3DPBLENDCAPS_DESTCOLOR | NPDISP_D3DPBLENDCAPS_INVDESTCOLOR;
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwDestBlendCaps = npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwSrcBlendCaps;
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwAlphaCmpCaps = NPDISP_D3DPCMPCAPS_ALL;
-    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwShadeCaps = NPDISP_D3DPSHADECAPS_COLORFLATRGB | NPDISP_D3DPSHADECAPS_COLORGOURAUDRGB;
-    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwTextureCaps = NPDISP_D3DPTEXTURECAPS_PERSPECTIVE | NPDISP_D3DPTEXTURECAPS_ALPHA | NPDISP_D3DPTEXTURECAPS_CUBEMAP | NPDISP_D3DPTEXTURECAPS_NOPROJECTEDBUMPENV;
+    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwShadeCaps = NPDISP_D3DPSHADECAPS_COLORFLATRGB | NPDISP_D3DPSHADECAPS_COLORGOURAUDRGB | NPDISP_D3DPSHADECAPS_FOGGOURAUD;
+    npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwTextureCaps = NPDISP_D3DPTEXTURECAPS_PERSPECTIVE | NPDISP_D3DPTEXTURECAPS_ALPHA | NPDISP_D3DPTEXTURECAPS_CUBEMAP | NPDISP_D3DPTEXTURECAPS_MIPMAP | NPDISP_D3DPTEXTURECAPS_NOPROJECTEDBUMPENV;
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwTextureFilterCaps = NPDISP_D3DPTFILTERCAPS_LINEAR |
-        NPDISP_D3DPTFILTERCAPS_MINFPOINT | NPDISP_D3DPTFILTERCAPS_MINFLINEAR |
+        NPDISP_D3DPTFILTERCAPS_LINEARMIPLINEAR | NPDISP_D3DPTFILTERCAPS_MINFPOINT | NPDISP_D3DPTFILTERCAPS_MINFLINEAR |
+        NPDISP_D3DPTFILTERCAPS_MIPFPOINT | NPDISP_D3DPTFILTERCAPS_MIPFLINEAR |
         NPDISP_D3DPTFILTERCAPS_MAGFPOINT | NPDISP_D3DPTFILTERCAPS_MAGFLINEAR;
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwTextureBlendCaps = NPDISP_D3DPTBLENDCAPS_MODULATE;
     npdispdd_d3dGlobal->hwCaps.dpcTriCaps.dwTextureAddressCaps = NPDISP_D3DPTADDRESSCAPS_WRAP | NPDISP_D3DPTADDRESSCAPS_MIRROR |
@@ -990,11 +1007,17 @@ static void npdispdd_initD3D(void)
     npdispdd_d3dParseUnknownCommand = 0;
 
     npdispdd_zero_bytes(&npdispdd_zPixelFormats, sizeof(npdispdd_zPixelFormats));
-    npdispdd_zPixelFormats.dwCount = 1;
+    npdispdd_zPixelFormats.dwCount = 2;
     npdispdd_zPixelFormats.formats[0].dwSize = sizeof(npdispdd_zPixelFormats.formats[0]);
     npdispdd_zPixelFormats.formats[0].dwFlags = 0x00000400UL;
     npdispdd_zPixelFormats.formats[0].dwZBufferBitDepth = 16UL;
     npdispdd_zPixelFormats.formats[0].dwZBitMask = 0x0000ffffUL;
+    npdispdd_zPixelFormats.formats[1].dwSize = sizeof(npdispdd_zPixelFormats.formats[1]);
+    npdispdd_zPixelFormats.formats[1].dwFlags = 0x00004400UL;
+    npdispdd_zPixelFormats.formats[1].dwZBufferBitDepth = 16UL;
+    npdispdd_zPixelFormats.formats[1].dwStencilBitDepth = 4UL;
+    npdispdd_zPixelFormats.formats[1].dwZBitMask = 0x00000fffUL;
+    npdispdd_zPixelFormats.formats[1].dwStencilBitMask = 0x0000f000UL;
 
     npdispdd_zero_bytes(&npdispdd_d3dExtendedCaps, sizeof(npdispdd_d3dExtendedCaps));
     npdispdd_d3dExtendedCaps.dwSize = sizeof(npdispdd_d3dExtendedCaps);
@@ -1005,12 +1028,16 @@ static void npdispdd_initD3D(void)
     npdispdd_d3dExtendedCaps.dwMaxTextureRepeat = 1024;
     npdispdd_d3dExtendedCaps.dwMaxTextureAspectRatio = 1024;
     npdispdd_d3dExtendedCaps.dwMaxAnisotropy = 1;
+    npdispdd_d3dExtendedCaps.dwStencilCaps = NPDISP_D3DSTENCILCAPS_KEEP | NPDISP_D3DSTENCILCAPS_ZERO |
+        NPDISP_D3DSTENCILCAPS_REPLACE | NPDISP_D3DSTENCILCAPS_INCRSAT | NPDISP_D3DSTENCILCAPS_DECRSAT |
+        NPDISP_D3DSTENCILCAPS_INVERT | NPDISP_D3DSTENCILCAPS_INCR | NPDISP_D3DSTENCILCAPS_DECR;
     npdispdd_d3dExtendedCaps.dwFVFCaps = 2;
     npdispdd_d3dExtendedCaps.dwTextureOpCaps = NPDISP_D3DTEXOPCAPS_DISABLE |
         NPDISP_D3DTEXOPCAPS_SELECTARG1 | NPDISP_D3DTEXOPCAPS_SELECTARG2 | NPDISP_D3DTEXOPCAPS_MODULATE |
         NPDISP_D3DTEXOPCAPS_ADD | NPDISP_D3DTEXOPCAPS_BUMPENVMAP | NPDISP_D3DTEXOPCAPS_BUMPENVMAPLUMINANCE;
     npdispdd_d3dExtendedCaps.wMaxTextureBlendStages = 3;
     npdispdd_d3dExtendedCaps.wMaxSimultaneousTextures = 3;
+    npdispdd_d3dExtendedCaps.dwVertexProcessingCaps = NPDISP_D3DVTXPCAPS_DIRECTIONALLIGHTS | NPDISP_D3DVTXPCAPS_POSITIONALLIGHTS;
 
     npdispdd_zero_bytes(&npdispdd_moreSurfaceCaps, sizeof(npdispdd_moreSurfaceCaps));
     npdispdd_moreSurfaceCaps.dwSize = sizeof(npdispdd_moreSurfaceCaps);
