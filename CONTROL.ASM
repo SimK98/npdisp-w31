@@ -44,6 +44,10 @@ cBegin <nogen>
     je  short .control_command_ok
     jmp .return_host
 .control_command_ok:
+    cmp di, 1
+    je  short .control_host_ok
+    jmp .return_host
+.control_host_ok:
     les si, DWORD PTR ss:[bp+10]
     mov ax, es
     or  ax, si
