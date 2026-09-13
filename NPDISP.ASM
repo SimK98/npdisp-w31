@@ -48,7 +48,8 @@ npdisp_ddVidMem	db	24	DUP(0)
 PUBLIC npdisp_ddBridgeInfo
 npdisp_ddBridgeInfo	db	80	DUP(0)
 PUBLIC npdisp_d3dGlobalDriverData
-npdisp_d3dGlobalDriverData	db	192	DUP(0)
+; D3D global data‚Ætexture format—Ìˆæ
+npdisp_d3dGlobalDriverData	db	1920	DUP(0)
 PUBLIC npdisp_d3dHalCallbacks
 npdisp_d3dHalCallbacks	db	140	DUP(0)
 PUBLIC npdisp_ddSetInfo
