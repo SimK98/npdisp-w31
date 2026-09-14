@@ -1,0 +1,29 @@
+1 VERSIONINFO
+FILEVERSION    0,18,0,0
+PRODUCTVERSION 0,18,0,0
+FILEFLAGSMASK  0
+FILEFLAGS      0
+FILEOS         0x00000004L
+FILETYPE       0x00000002L
+FILESUBTYPE    0x00000000L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041103A4"   /* LangID = Japanese, CodePage = 932 */
+        BEGIN
+            VALUE "CompanyName",      "Neko Project II", "\0"
+            VALUE "FileDescription",  "NPDISP Graphics API Compatibility Driver", "\0"
+            VALUE "FileVersion",      "0.18.0.0", "\0"
+            VALUE "InternalName",     "NPOGL32", "\0"
+            VALUE "LegalCopyright",   "ÇÀÇ±Ç≥ÇÒäJî≠ÇøÅ[Çﬁ", "\0"
+            VALUE "OriginalFilename", "NPOGL32.DLL", "\0"
+            VALUE "ProductName",      "Neko Project II Display Driver", "\0"
+            VALUE "ProductVersion",   "0.18.0.0", "\0"
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0411, 0x03A4
+    END
+END

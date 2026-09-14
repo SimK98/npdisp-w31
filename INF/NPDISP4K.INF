@@ -15,6 +15,7 @@ Driver.Copy = 11
 npdisp.drv=1
 npdisp.vxd=1
 npdispdd.dll=1
+NPOGL32.DLL=1
 
 [Manufacturer]
 %Mfg%=Mfg
@@ -31,6 +32,7 @@ AddReg=Driver.AddReg
 npdisp.drv
 npdisp.vxd
 npdispdd.dll
+NPOGL32.DLL
 
 [Prev.DelReg]
 HKR,,Ver
@@ -41,6 +43,7 @@ HKR,INFO
 HKR,CURRENT
 
 [Driver.AddReg]
+HKLM,Software\Microsoft\Windows\CurrentVersion\OpenGLdrivers,NPOGL32,2,"NPOGL32.DLL"
 HKR,,Ver,,4.0
 HKR,,DevLoader,,*vdd
 HKR,DEFAULT,Mode,,"8,800,600"
