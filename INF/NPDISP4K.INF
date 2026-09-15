@@ -2,7 +2,7 @@
 Class=DISPLAY
 signature="$CHICAGO$"
 Provider=%Mfg%
-DriverVer=05/23/2026,0.15.0.0
+DriverVer=09/16/2026,0.19.0.0
 
 [DestinationDirs]
 DefaultDestDir  = 11
