@@ -2,7 +2,7 @@
  * NPDISP graphics API compatibility driver.
  *
  * This is an independent compatibility implementation.
- * It has not undergone the Khronos conformance process,
+ * It has not undergone any conformance process,
  * and no claim of conformance is made.
  */
 
@@ -3024,7 +3024,7 @@ static void APIENTRY npgl_glAccum(GLenum op, GLfloat value)
     NPGL_CONTEXT *c=npgl_current();NPGL_LIST_COMMAND cmd;if(!c)return;if(c->inBegin){npgl_set_error(c,GL_INVALID_OPERATION);return;}
     if(op!=GL_ACCUM&&op!=GL_LOAD&&op!=GL_RETURN&&op!=GL_MULT&&op!=GL_ADD){npgl_set_error(c,GL_INVALID_ENUM);return;}
     if(c->compilingList&&!c->replayingList){memset(&cmd,0,sizeof(cmd));cmd.op=NPGL_LIST_OP_ACCUM;cmd.u[0]=(DWORD)op;cmd.f[0]=value;if(!npgl_record_list_command(c,&cmd))return;if(c->listMode==GL_COMPILE)return;}
-    /* 蓄積バッファは持たない。 */
+    /* 蓁E��バチE��ァは持たなぁE��E*/
 }
 
 static DWORD npgl_pixel_buffer(GLenum mode) { return mode==GL_FRONT ? NPDISP_OGL_PIXEL_FRONT : NPDISP_OGL_PIXEL_BACK; }
