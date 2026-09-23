@@ -98,6 +98,8 @@ typedef int BOOL;
 
 #define NPDISP_DDHAL_DRIVER_NOTHANDLED            0x00000000UL
 #define NPDISP_DDHAL_DRIVER_HANDLED               0x00000001UL
+#define NPDISP_DDLOCK_WAIT                        0x00000001UL
+#define NPDISP_DDERR_WASSTILLDRAWING              0x8876021cUL
 #define NPDISP_DDWAITVB_BLOCKBEGIN                0x00000001UL
 #define NPDISP_DDWAITVB_BLOCKEND                  0x00000004UL
 #define NPDISP_DDWAITVB_I_TESTVB                  0x80000006UL
@@ -162,6 +164,19 @@ typedef struct {
     DWORD ddRVal;
     DWORD WaitForVerticalBlank;
 } NPDISP_DDHAL_WAITVBDATA32;
+
+typedef struct {
+    DWORD lpDD;
+    DWORD lpDDSurface;
+    DWORD bHasRect;
+    DWORD rArea[4];
+    DWORD lpSurfData;
+    DWORD ddRVal;
+    DWORD LockAddr;
+    DWORD dwFlags;
+} NPDISP_DDHAL_LOCKDATA32;
+
+typedef char NPDISP_DDHAL_LOCKDATA32_SIZE_CHECK[(sizeof(NPDISP_DDHAL_LOCKDATA32) == 44) ? 1 : -1];
 
 typedef struct {
     DWORD dwSize;
@@ -327,7 +342,20 @@ NPDISP_DDBRIDGE_WRAPPER(npdispdd_GetDriverInfo,       NPDISP_DDBRIDGE_CB_DD_GETD
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_DestroySurface,      NPDISP_DDBRIDGE_CB_SURF_DESTROY)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_Flip,                NPDISP_DDBRIDGE_CB_SURF_FLIP)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_SetClipList,         NPDISP_DDBRIDGE_CB_SURF_SETCLIPLIST)
-NPDISP_DDBRIDGE_WRAPPER(npdispdd_Lock,                NPDISP_DDBRIDGE_CB_SURF_LOCK)
+static DWORD WINAPI npdispdd_Lock(void *lpData)
+{
+    NPDISP_DDHAL_LOCKDATA32 *data;
+    DWORD result;
+
+    if (!lpData) return NPDISP_DDHAL_DRIVER_NOTHANDLED;
+    data = (NPDISP_DDHAL_LOCKDATA32 *)lpData;
+    for (;;) {
+        result = npdispdd_host_call(NPDISP_DDBRIDGE_CB_SURF_LOCK, data);
+        if (result != NPDISP_DDHAL_DRIVER_HANDLED) return result;
+        if (data->ddRVal != NPDISP_DDERR_WASSTILLDRAWING) return result;
+        if (!(data->dwFlags & NPDISP_DDLOCK_WAIT)) return result;
+    }
+}
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_Unlock,              NPDISP_DDBRIDGE_CB_SURF_UNLOCK)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_Blt,                 NPDISP_DDBRIDGE_CB_SURF_BLT)
 NPDISP_DDBRIDGE_WRAPPER(npdispdd_SetColorKey,         NPDISP_DDBRIDGE_CB_SURF_SETCOLORKEY)
