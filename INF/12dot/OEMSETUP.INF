@@ -9,35 +9,35 @@
 Z =. ,"Neko Project 21/W Display Driver Disk (12ﾄﾞｯﾄ)",diskNDz
 
 [display]
-nd6448112 = Z:npdisp.drv, "Neko Project 21/W 640x480 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd6448112
-nd6448412 = Z:npdisp.drv, "Neko Project 21/W 640x480 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd6448412
-nd6448812 = Z:npdisp.drv, "Neko Project 21/W 640x480 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd6448812
-nd64481612 = Z:npdisp.drv, "Neko Project 21/W 640x480 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd64481612
-nd64482412 = Z:npdisp.drv, "Neko Project 21/W 640x480 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd64482412
+nd6448112 = Z:npdisp.drv, "Neko Project 21/W 640x480 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd6448112
+nd6448412 = Z:npdisp.drv, "Neko Project 21/W 640x480 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd6448412
+nd6448812 = Z:npdisp.drv, "Neko Project 21/W 640x480 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd6448812
+nd64481612 = Z:npdisp.drv, "Neko Project 21/W 640x480 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd64481612
+nd64482412 = Z:npdisp.drv, "Neko Project 21/W 640x480 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd64482412
 
-nd8060112 = Z:npdisp.drv, "Neko Project 21/W 800x600 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd8060112
-nd8060412 = Z:npdisp.drv, "Neko Project 21/W 800x600 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd8060412
-nd8060812 = Z:npdisp.drv, "Neko Project 21/W 800x600 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd8060812
-nd80601612 = Z:npdisp.drv, "Neko Project 21/W 800x600 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd80601612
-nd80602412 = Z:npdisp.drv, "Neko Project 21/W 800x600 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd80602412
+nd8060112 = Z:npdisp.drv, "Neko Project 21/W 800x600 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd8060112
+nd8060412 = Z:npdisp.drv, "Neko Project 21/W 800x600 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd8060412
+nd8060812 = Z:npdisp.drv, "Neko Project 21/W 800x600 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd8060812
+nd80601612 = Z:npdisp.drv, "Neko Project 21/W 800x600 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd80601612
+nd80602412 = Z:npdisp.drv, "Neko Project 21/W 800x600 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd80602412
 
-nd10276112 = Z:npdisp.drv, "Neko Project 21/W 1024x768 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd10276112
-nd10276412 = Z:npdisp.drv, "Neko Project 21/W 1024x768 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd10276412
-nd10276812 = Z:npdisp.drv, "Neko Project 21/W 1024x768 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd10276812
-nd102761612 = Z:npdisp.drv, "Neko Project 21/W 1024x768 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd102761612
-nd102762412 = Z:npdisp.drv, "Neko Project 21/W 1024x768 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd102762412
+nd10276112 = Z:npdisp.drv, "Neko Project 21/W 1024x768 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd10276112
+nd10276412 = Z:npdisp.drv, "Neko Project 21/W 1024x768 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd10276412
+nd10276812 = Z:npdisp.drv, "Neko Project 21/W 1024x768 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd10276812
+nd102761612 = Z:npdisp.drv, "Neko Project 21/W 1024x768 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd102761612
+nd102762412 = Z:npdisp.drv, "Neko Project 21/W 1024x768 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd102762412
 
-nd12880112 = Z:npdisp.drv, "Neko Project 21/W 1280x800 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd12880112
-nd12880412 = Z:npdisp.drv, "Neko Project 21/W 1280x800 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd12880412
-nd12880812 = Z:npdisp.drv, "Neko Project 21/W 1280x800 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd12880812
-nd128801612 = Z:npdisp.drv, "Neko Project 21/W 1280x800 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd128801612
-nd128802412 = Z:npdisp.drv, "Neko Project 21/W 1280x800 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd128802412
+nd12880112 = Z:npdisp.drv, "Neko Project 21/W 1280x800 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd12880112
+nd12880412 = Z:npdisp.drv, "Neko Project 21/W 1280x800 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd12880412
+nd12880812 = Z:npdisp.drv, "Neko Project 21/W 1280x800 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd12880812
+nd128801612 = Z:npdisp.drv, "Neko Project 21/W 1280x800 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd128801612
+nd128802412 = Z:npdisp.drv, "Neko Project 21/W 1280x800 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd128802412
 
-nd192108112 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd192108112
-nd192108412 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd192108412
-nd192108812 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd192108812
-nd1921081612 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd1921081612
-nd1921082412 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, 1:vddn.386, 7:grabn.3gr,, 5:98logo.rle, nd1921082412
+nd192108112 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 白黒 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd192108112
+nd192108412 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 16色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd192108412
+nd192108812 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 256色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd192108812
+nd1921081612 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 64K色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd1921081612
+nd1921082412 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 16M色 12ﾄﾞｯﾄ", "100,72,72", 2:grabn.2gr, 6:98logon.lgo, Z:vddnp2.386, Z:grabnp2.3gr,, 5:98logo.rle, nd1921082412
 
 [nd6448112]
 3:GSYS12.FOD,,wifeman.ini,DefaultFont,"FontDriver=","FontDriver=GSYS12.FOD",,wifeman.ini,DefaultFont,"FontPackage=","FontPackage=GSYSTAG.FON"
@@ -292,6 +292,9 @@ nd1921082412 = Z:npdisp.drv, "Neko Project 21/W 1920x1080 16M色 12ﾄﾞｯﾄ", "100,72
 ,,system.ini,npdisp.drv,"height=","height=1080"
 ,,system.ini,npdisp.drv,"bpp=","bpp=24"
 ,,system.ini,386enh,"32BitDiskAccess=","32BitDiskAccess=OFF"
+
+[grabnp2.3gr]
+2:grab386.fon,2:grab386.fon
 
 [sysfonts]
 4:sysspro.fon,"12 ﾄﾞｯﾄ ｼｽﾃﾑ ﾌｫﾝﾄ", "100,72,72"

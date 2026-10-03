@@ -8,8 +8,14 @@ char g_szAppName[] = "NPDISP Mode Utility";
 
 static void LoadCurrentSettings(HWND hwnd);
 static void ApplySettings(HWND hwnd);
+static LPCSTR GetFileNamePart(LPCSTR path);
+static BOOL CheckNP2VDDGrabber(void);
+static void InitExtendedSettings(HWND hwnd);
+static void LoadExtendedSettings(HWND hwnd);
+static void ApplyExtendedSettings(HWND hwnd);
 
 static HINSTANCE g_hInst;
+static BOOL g_fExtendedSettings;
 
 static void AskRestartWindows(HWND hwnd)
 {
@@ -49,6 +55,137 @@ static void AddBppItem(HWND hwnd, LPCSTR text, int value)
     }
 }
 
+static void SetDialogFont(HWND hwnd, HWND hctl)
+{
+    HFONT hfont;
+
+    if (!hctl)
+        return;
+
+    hfont = (HFONT)SendMessage(hwnd, WM_GETFONT, 0, 0);
+    if (hfont)
+        SendMessage(hctl, WM_SETFONT, (WPARAM)hfont, 0);
+}
+
+static HWND CreateDlgControl(
+    HWND hwnd,
+    LPCSTR cls,
+    LPCSTR text,
+    DWORD style,
+    int id,
+    int x,
+    int y,
+    int cx,
+    int cy)
+{
+    RECT r;
+    HWND hctl;
+
+    r.left = x;
+    r.top = y;
+    r.right = x + cx;
+    r.bottom = y + cy;
+    MapDialogRect(hwnd, &r);
+
+    hctl = CreateWindow(
+        cls,
+        text,
+        WS_CHILD | WS_VISIBLE | style,
+        r.left,
+        r.top,
+        r.right - r.left,
+        r.bottom - r.top,
+        hwnd,
+        (HMENU)id,
+        g_hInst,
+        NULL);
+
+    SetDialogFont(hwnd, hctl);
+    return hctl;
+}
+
+static void MoveDlgItemDown(HWND hwnd, int id, int dy)
+{
+    HWND hctl;
+    RECT r;
+    POINT pt;
+
+    hctl = GetDlgItem(hwnd, id);
+    if (!hctl)
+        return;
+
+    GetWindowRect(hctl, &r);
+    pt.x = r.left;
+    pt.y = r.top;
+    ScreenToClient(hwnd, &pt);
+
+    SetWindowPos(
+        hctl,
+        NULL,
+        pt.x,
+        pt.y + dy,
+        r.right - r.left,
+        r.bottom - r.top,
+        SWP_NOZORDER | SWP_NOACTIVATE);
+}
+
+static void InitExtendedSettings(HWND hwnd)
+{
+    RECT wr;
+    RECT dr;
+    int dy;
+
+    dr.left = 0;
+    dr.top = 0;
+    dr.right = 0;
+    dr.bottom = 72;
+    MapDialogRect(hwnd, &dr);
+    dy = dr.bottom;
+
+    GetWindowRect(hwnd, &wr);
+    SetWindowPos(
+        hwnd,
+        NULL,
+        0,
+        0,
+        wr.right - wr.left,
+        (wr.bottom - wr.top) + dy,
+        SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+
+    MoveDlgItemDown(hwnd, IDOK, dy);
+    MoveDlgItemDown(hwnd, IDCANCEL, dy);
+
+    CreateDlgControl(
+        hwnd, "BUTTON", "DOS窓グラフィック",
+        BS_GROUPBOX, IDC_NP2_GROUP, 8, 52, 164, 74);
+    CreateDlgControl(
+        hwnd, "BUTTON", "ウィンドウモード拡張有効",
+        BS_AUTOCHECKBOX | WS_TABSTOP, IDC_NP2_USEGRAPH, 15, 64, 145, 10);
+    CreateDlgControl(
+        hwnd, "BUTTON", "256色モードでGDI描画を使用",
+        BS_AUTOCHECKBOX | WS_TABSTOP, IDC_NP2_USEDIB8, 15, 76, 145, 10);
+    CreateDlgControl(
+        hwnd, "BUTTON", "多色でも256色DIB経由で描画",
+        BS_AUTOCHECKBOX | WS_TABSTOP, IDC_NP2_USEDIB8HC, 15, 88, 145, 10);
+    CreateDlgControl(
+        hwnd, "STATIC", "白黒変換モード:",
+        0, IDC_NP2_MONOLABEL, 15, 102, 145, 10);
+    CreateDlgControl(
+        hwnd, "BUTTON", "輝度",
+        BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,
+        IDC_NP2_MONOMODE_LUMA, 22, 112, 40, 10);
+    CreateDlgControl(
+        hwnd, "BUTTON", "0以外",
+        BS_AUTORADIOBUTTON | WS_TABSTOP,
+        IDC_NP2_MONOMODE_NONZERO, 66, 112, 40, 10);
+    CreateDlgControl(
+        hwnd, "BUTTON", "ディザ",
+        BS_AUTORADIOBUTTON | WS_TABSTOP,
+        IDC_NP2_MONOMODE_DITHER, 110, 112, 40, 10);
+
+    LoadExtendedSettings(hwnd);
+}
+
 BOOL CALLBACK __export MainDlgProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
     switch (msg)
@@ -77,6 +214,10 @@ BOOL CALLBACK __export MainDlgProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
         AddBppItem(hwnd, "32", 32);
         
         LoadCurrentSettings(hwnd);
+
+        g_fExtendedSettings = CheckNP2VDDGrabber();
+        if (g_fExtendedSettings)
+            InitExtendedSettings(hwnd);
         
         GetPrivateProfileString(
             "npdisp.drv",
@@ -172,6 +313,69 @@ static void LoadCurrentSettings(HWND hwnd)
     }
 
     SetDlgItemText(hwnd, IDC_BPP, buf);
+}
+
+static void LoadExtendedSettings(HWND hwnd)
+{
+    int mono;
+
+    CheckDlgButton(
+        hwnd,
+        IDC_NP2_USEGRAPH,
+        GetPrivateProfileInt("386Enh", "NP2UseGraph", 0, SYSTEM_INI) ? 1 : 0);
+    CheckDlgButton(
+        hwnd,
+        IDC_NP2_USEDIB8,
+        GetPrivateProfileInt("386Enh", "NP2UseDIB8", 0, SYSTEM_INI) ? 1 : 0);
+    CheckDlgButton(
+        hwnd,
+        IDC_NP2_USEDIB8HC,
+        GetPrivateProfileInt("386Enh", "NP2UseDIB8HC", 0, SYSTEM_INI) ? 1 : 0);
+
+    mono = GetPrivateProfileInt("386Enh", "NP2MonoMode", 0, SYSTEM_INI);
+    if (mono < 0 || mono > 2)
+        mono = 0;
+
+    CheckRadioButton(
+        hwnd,
+        IDC_NP2_MONOMODE_LUMA,
+        IDC_NP2_MONOMODE_DITHER,
+        IDC_NP2_MONOMODE_LUMA + mono);
+}
+
+static void ApplyExtendedSettings(HWND hwnd)
+{
+    char buf[8];
+    int mono;
+
+    WritePrivateProfileString(
+        "386Enh",
+        "NP2UseGraph",
+        IsDlgButtonChecked(hwnd, IDC_NP2_USEGRAPH) ? "1" : "0",
+        SYSTEM_INI);
+    WritePrivateProfileString(
+        "386Enh",
+        "NP2UseDIB8",
+        IsDlgButtonChecked(hwnd, IDC_NP2_USEDIB8) ? "1" : "0",
+        SYSTEM_INI);
+    WritePrivateProfileString(
+        "386Enh",
+        "NP2UseDIB8HC",
+        IsDlgButtonChecked(hwnd, IDC_NP2_USEDIB8HC) ? "1" : "0",
+        SYSTEM_INI);
+
+    mono = 0;
+    if (IsDlgButtonChecked(hwnd, IDC_NP2_MONOMODE_NONZERO))
+        mono = 1;
+    else if (IsDlgButtonChecked(hwnd, IDC_NP2_MONOMODE_DITHER))
+        mono = 2;
+
+    wsprintf(buf, "%d", mono);
+    WritePrivateProfileString(
+        "386Enh",
+        "NP2MonoMode",
+        buf,
+        SYSTEM_INI);
 }
 
 static BOOL ValidateBPP(int bpp)
@@ -279,6 +483,9 @@ static void ApplySettings(HWND hwnd)
         buf,
         SYSTEM_INI);
 
+    if (g_fExtendedSettings)
+        ApplyExtendedSettings(hwnd);
+
     wsprintf(
         desc,
         "Neko Project 21/W %dx%d %dbpp",
@@ -317,6 +524,74 @@ static LPCSTR GetFileNamePart(LPCSTR path)
     }
 
     return last;
+}
+
+static BOOL ValueMatchesFileName(LPCSTR value, LPCSTR expected)
+{
+    char token[128];
+    LPCSTR p;
+    LPCSTR fname;
+    int i;
+
+    p = value;
+    while (*p == ' ' || *p == '\t' || *p == '\"')
+        p++;
+
+    fname = GetFileNamePart(p);
+    i = 0;
+    while (*fname &&
+           *fname != ' ' && *fname != '\t' &&
+           *fname != ',' && *fname != ';' && *fname != '\"' &&
+           i < (int)sizeof(token) - 1)
+    {
+        token[i++] = *fname++;
+    }
+    token[i] = '\0';
+
+    return (lstrcmpi(token, expected) == 0);
+}
+
+static BOOL CheckNP2VDDGrabber(void)
+{
+    char grabber[128];
+    char vdd[128];
+    DWORD len;
+
+    len = GetPrivateProfileString(
+        "boot",
+        "386grabber",
+        "",
+        grabber,
+        sizeof(grabber),
+        SYSTEM_INI);
+    if (len == 0 || !ValueMatchesFileName(grabber, "GRABNP2.3GR"))
+        return FALSE;
+
+    /*
+     * The PC-98 VDD is normally the [386Enh] display driver.
+     * Also accept a device= entry for installations that load it that way.
+     */
+    len = GetPrivateProfileString(
+        "386Enh",
+        "display",
+        "",
+        vdd,
+        sizeof(vdd),
+        SYSTEM_INI);
+    if (len != 0 && ValueMatchesFileName(vdd, "VDDNP2.386"))
+        return TRUE;
+
+    len = GetPrivateProfileString(
+        "386Enh",
+        "device",
+        "",
+        vdd,
+        sizeof(vdd),
+        SYSTEM_INI);
+    if (len != 0 && ValueMatchesFileName(vdd, "VDDNP2.386"))
+        return TRUE;
+
+    return FALSE;
 }
 
 static BOOL CheckCurrentDriver(void)
